@@ -29,4 +29,4 @@ class TorchvisionModel(nn.Module):
         )
 
     def forward(self, x: torch.Tensor):
-        return self.model(x)
+        return self.model(x)['out']

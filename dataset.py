@@ -17,15 +17,16 @@ CLASSES = [
     'Triquetrum', 'Pisiform', 'Radius', 'Ulna',
 ]
 
-CLASS2IND = {v: i for i, v in enumerate(CLASSES)}
-IND2CLASS = {v: k for k, v in CLASS2IND.items()}
-
 class XRayDataset(Dataset):
-    def __init__(self, fnames, labels, image_root, label_root, transforms=None, is_train=True):
+    def __init__(self, fnames, labels, image_root, label_root, fold=0, transforms=None, is_train=True):
         self.transforms = transforms
         self.is_train = is_train
         self.image_root = image_root
         self.label_root = label_root
+        self.validation_fold = fold
+        self.class2ind = {v: i for i, v in enumerate(CLASSES)}
+        self.ind2class = {v: k for k, v in self.class2ind.items()}
+        self.num_classes = len(CLASSES)
         
         groups = [osp.dirname(fname) for fname in self.fnames]
         
@@ -38,7 +39,7 @@ class XRayDataset(Dataset):
         labelnames = []
         for i, (x, y) in enumerate(gkf.split(fnames, ys, groups)):
             if self.is_train:
-                if i == 0:
+                if i == self.validation_fold:
                     continue        
                 filenames += list(fnames[y])
                 labelnames += list(labels[y])
@@ -56,13 +57,13 @@ class XRayDataset(Dataset):
     
     def __getitem__(self, item):
         image_name = self.fnames[item]
-        image_path = os.path.join(self.image_root, image_name)
+        image_path = osp.join(self.image_root, image_name)
         
         image = cv2.imread(image_path)
         image = image / 255.
         
         label_name = self.labels[item]
-        label_path = os.path.join(self.label_root, label_name)
+        label_path = osp.join(self.label_root, label_name)
         
         # (H, W, NC) 모양의 label을 생성합니다.
         label_shape = tuple(image.shape[:2]) + (len(CLASSES), )
@@ -76,7 +77,7 @@ class XRayDataset(Dataset):
         # 클래스 별로 처리합니다.
         for ann in annotations:
             c = ann["label"]
-            class_ind = CLASS2IND[c]
+            class_ind = self.class2ind[c]
             points = np.array(ann["points"])
             
             # polygon 포맷을 dense한 mask 포맷으로 바꿉니다.

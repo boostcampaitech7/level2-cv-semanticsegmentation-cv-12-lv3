@@ -43,13 +43,17 @@ class Trainer:
         self.val_interval = val_interval
 
 
-    def save_model(self, epoch, dice_score):
+    def save_model(self, epoch, dice_score, before_path):
         # checkpoint 저장 폴더 생성
         if not osp.isdir(self.save_dir):
             os.mkdir(self.save_dir)
 
+        if before_path != "" and osp.exists(before_path):
+            os.remove(before_path)
+
         output_path = osp.join(self.save_dir, f"best_{epoch}epoch_{dice_score:.4f}.pt")
         torch.save(self.model, output_path)
+        return output_path
 
 
     def train_epoch(self, epoch):
@@ -68,6 +72,7 @@ class Trainer:
                 self.optimizer.step()
 
                 total_loss += loss.item()
+                pbar.update(1)
                 pbar.set_postfix(loss=loss.item())
 
         train_end = time.time() - train_start 
@@ -110,6 +115,7 @@ class Trainer:
                     dice = dice_coef(outputs, masks)
                     dices.append(dice)
 
+                    pbar.update(1)
                     pbar.set_postfix(dice=torch.mean(dice).item(), loss=loss.item())
 
         val_end = time.time() - val_start
@@ -137,6 +143,7 @@ class Trainer:
         print(f'Start training..')
 
         best_dice = 0.
+        before_path = ""
         
         for epoch in range(1, self.max_epoch + 1):
 
@@ -149,4 +156,4 @@ class Trainer:
                 if best_dice < avg_dice:
                     print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}")
                     best_dice = avg_dice
-                    self.save_model(epoch, best_dice)
+                    before_path = self.save_model(epoch, best_dice, before_path)

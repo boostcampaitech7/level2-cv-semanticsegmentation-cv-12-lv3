@@ -4,7 +4,9 @@ label_root: /data/ephemeral/home/data/train/outputs_json
 model_name: fcn_resnet50
 pretrained: True
 
-batch_size: 8
+train_batch_size: 8
+val_batch_size: 4
+
 lr: 1e-4
 weight_decay: 1e-6
 

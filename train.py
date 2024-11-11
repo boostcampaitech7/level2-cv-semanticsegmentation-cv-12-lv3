@@ -76,7 +76,7 @@ def main(cfg):
     
     train_loader = DataLoader(
         dataset=train_dataset, 
-        batch_size=cfg.batch_size,
+        batch_size=cfg.train_batch_size,
         shuffle=True,
         num_workers=8,
         drop_last=True,
@@ -85,7 +85,7 @@ def main(cfg):
     # 주의: validation data는 이미지 크기가 크기 때문에 `num_wokers`는 커지면 메모리 에러가 발생할 수 있습니다.
     valid_loader = DataLoader(
         dataset=valid_dataset, 
-        batch_size=cfg.batch_size,
+        batch_size=cfg.val_batch_size,
         shuffle=False,
         num_workers=0,
         drop_last=False

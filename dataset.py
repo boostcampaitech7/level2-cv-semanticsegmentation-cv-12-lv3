@@ -4,6 +4,7 @@ import json
 import torch
 import numpy as np
 import os.path as osp
+import albumentations as A
 
 from torch.utils.data import Dataset
 from sklearn.model_selection import GroupKFold
@@ -19,7 +20,7 @@ CLASSES = [
 
 class XRayDataset(Dataset):
     def __init__(self, fnames, labels, image_root, label_root, fold=0, transforms=None, is_train=True):
-        self.transforms = transforms
+        self.transforms = A.Compose(transforms)
         self.is_train = is_train
         self.image_root = image_root
         self.label_root = label_root
@@ -28,10 +29,10 @@ class XRayDataset(Dataset):
         self.ind2class = {v: k for k, v in self.class2ind.items()}
         self.num_classes = len(CLASSES)
         
-        groups = [osp.dirname(fname) for fname in self.fnames]
+        groups = [osp.dirname(fname) for fname in fnames]
         
         # dummy label
-        ys = [0] * len(self.fnames)
+        ys = [0] * len(fnames)
         
         gkf = GroupKFold(n_splits=5)
         

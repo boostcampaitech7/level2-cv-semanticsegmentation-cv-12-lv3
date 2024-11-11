@@ -1,5 +1,5 @@
 ---
-title: "[Feature/Refactor/Bug/Docs]"
+title: "[Feature/Refactor/Bug/Docs] : "
 ---
 
 ## 🤔 Motivation 🤔

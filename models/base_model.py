@@ -12,7 +12,7 @@ class TorchvisionModel(nn.Module):
                  num_classes: int,
                  pretrained: bool):
         super(TorchvisionModel, self).__init__()
-        self.model = models.__dict__[model_name](pretrained=pretrained)
+        self.model = models.segmentation.__dict__[model_name](pretrained=pretrained)
 
         old_head = self.model.classifier
         last_conv = list(old_head.children())[-1]

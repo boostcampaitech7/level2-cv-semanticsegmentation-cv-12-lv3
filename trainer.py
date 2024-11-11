@@ -1,6 +1,6 @@
+import os
 import time
 import torch
-import datetime
 import torch.nn as nn
 import os.path as osp
 import torch.optim as optim
@@ -27,7 +27,7 @@ class Trainer:
                  val_loader: DataLoader,
                  threshold: float,
                  optimizer: optim.Optimizer,
-                 loss_fn: torch.nn.modules.loss._Loss,
+                 criterion: torch.nn.modules.loss._Loss,
                  max_epoch: int,
                  save_dir: str,
                  val_interval: int):
@@ -36,7 +36,7 @@ class Trainer:
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.optimizer = optimizer
-        self.loss_fn = loss_fn
+        self.criterion = criterion
         self.max_epoch = max_epoch
         self.save_dir = save_dir
         self.threshold = threshold
@@ -44,6 +44,10 @@ class Trainer:
 
 
     def save_model(self, epoch, dice_score):
+        # checkpoint 저장 폴더 생성
+        if not osp.isdir(self.save_dir):
+            os.mkdir(self.save_dir)
+
         output_path = osp.join(self.save_dir, f"best_{epoch}epoch_{dice_score:.4f}.pt")
         torch.save(self.model, output_path)
 
@@ -58,7 +62,7 @@ class Trainer:
                 images, masks = images.to(self.device), masks.to(self.device)
                 outputs = self.model(images)
 
-                loss = self.loss_fn(outputs, masks)
+                loss = self.criterion(outputs, masks)
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
@@ -96,7 +100,7 @@ class Trainer:
                     if output_h != mask_h or output_w != mask_w:
                         outputs = F.interpolate(outputs, size=(mask_h, mask_w), mode="bilinear")
                     
-                    loss = self.loss_fn(outputs, masks)
+                    loss = self.criterion(outputs, masks)
                     total_loss += loss.item()
 
                     outputs = torch.sigmoid(outputs)

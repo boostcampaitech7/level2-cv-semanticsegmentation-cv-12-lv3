@@ -101,3 +101,33 @@ class XRayDataset(Dataset):
         label = torch.from_numpy(label).float()
             
         return image, label
+    
+
+class XRayInferenceDataset(Dataset):
+    def __init__(self, fnames, image_root, transforms=None):
+        self.fnames = np.array(sorted(fnames))
+        self.image_root = image_root
+        self.transforms = transforms
+        self.ind2class = {i: v for i, v in enumerate(CLASSES)}
+    
+    def __len__(self):
+        return len(self.fnames)
+    
+    def __getitem__(self, item):
+        image_name = self.fnames[item]
+        image_path = osp.join(self.image_root, image_name)
+        
+        image = cv2.imread(image_path)
+        image = image / 255.
+        
+        if self.transforms is not None:
+            inputs = {"image": image}
+            result = self.transforms(**inputs)
+            image = result["image"]
+
+        # to tenser will be done later
+        image = image.transpose(2, 0, 1)  
+        
+        image = torch.from_numpy(image).float()
+            
+        return image, image_name

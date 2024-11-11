@@ -7,10 +7,8 @@ import numpy as np
 import torch.nn as nn
 import albumentations as A
 
-
 import argparse
 import torch.optim as optim
-import torch.optim.lr_scheduler as lr_scheduler
 
 from tqdm.auto import tqdm
 from torch.utils.data import DataLoader

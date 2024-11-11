@@ -1,0 +1,148 @@
+import time
+import torch
+import datetime
+import torch.nn as nn
+import os.path as osp
+import torch.optim as optim
+import torch.nn.functional as F
+
+from tqdm.auto import tqdm
+from datetime import timedelta
+from torch.utils.data import DataLoader
+
+
+def dice_coef(y_true, y_pred):
+        y_true_f = y_true.flatten(2)
+        y_pred_f = y_pred.flatten(2)
+        intersection = torch.sum(y_true_f * y_pred_f, -1)
+
+        eps = 0.0001
+        return (2. * intersection + eps) / (torch.sum(y_true_f, -1) + torch.sum(y_pred_f, -1) + eps)
+
+class Trainer:
+    def __init__(self, 
+                 model: nn.Module,
+                 device: torch.device,
+                 train_loader: DataLoader,
+                 val_loader: DataLoader,
+                 threshold: float,
+                 optimizer: optim.Optimizer,
+                 loss_fn: torch.nn.modules.loss._Loss,
+                 max_epoch: int,
+                 save_dir: str,
+                 val_interval: int):
+        self.model = model
+        self.device = device
+        self.train_loader = train_loader
+        self.val_loader = val_loader
+        self.optimizer = optimizer
+        self.loss_fn = loss_fn
+        self.max_epoch = max_epoch
+        self.save_dir = save_dir
+        self.threshold = threshold
+        self.val_interval = val_interval
+
+
+    def save_model(self, epoch, dice_score):
+        output_path = osp.join(self.save_dir, f"best_{epoch}epoch_{dice_score:.4f}.pt")
+        torch.save(self.model, output_path)
+
+
+    def train_epoch(self, epoch):
+        train_start = time.time()
+        self.model.train()
+        total_loss = 0.0
+
+        with tqdm(total=len(self.train_loader), desc=f"[Training Epoch {epoch}]", disable=False) as pbar:
+            for images, masks in self.train_loader:
+                images, masks = images.to(self.device), masks.to(self.device)
+                outputs = self.model(images)
+
+                loss = self.loss_fn(outputs, masks)
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
+
+                total_loss += loss.item()
+                pbar.set_postfix(loss=loss.item())
+
+        train_end = time.time() - train_start 
+        print("Epoch {}, Train Loss: {:.4f} || Elapsed time: {} || ETA: {}".format(
+            epoch,
+            total_loss / len(self.train_loader),
+            timedelta(seconds=train_end),
+            timedelta(seconds=train_end * (self.max_epoch - epoch))
+        ))
+        return total_loss / len(self.train_loader)
+    
+
+    def validation(self, epoch):
+        val_start = time.time()
+        self.model.eval()
+
+        total_loss = 0
+        dices = []
+
+        with torch.no_grad():
+            with tqdm(total=len(self.val_loader), desc=f'[Validation Epoch {epoch}]', disable=False) as pbar:
+                for images, masks in self.val_loader:
+                    images, masks = images.to(self.device), masks.to(self.device)
+                    outputs = self.model(images)
+
+                    output_h, output_w = outputs.size(-2), outputs.size(-1)
+                    mask_h, mask_w = masks.size(-2), masks.size(-1)
+
+                    # gt와 prediction의 크기가 다른 경우 prediction을 gt에 맞춰 interpolation 합니다.
+                    if output_h != mask_h or output_w != mask_w:
+                        outputs = F.interpolate(outputs, size=(mask_h, mask_w), mode="bilinear")
+                    
+                    loss = self.loss_fn(outputs, masks)
+                    total_loss += loss.item()
+
+                    outputs = torch.sigmoid(outputs)
+                    outputs = (outputs > self.threshold).detach().cpu()
+                    masks = masks.detach().cpu()
+
+                    dice = dice_coef(outputs, masks)
+                    dices.append(dice)
+
+                    pbar.set_postfix(dice=torch.mean(dice).item(), loss=loss.item())
+
+        val_end = time.time() - val_start
+        dices = torch.cat(dices, 0)
+        dices_per_class = torch.mean(dices, 0)
+        dice_str = [
+            f"{c:<12}: {d.item():.4f}"
+            for c, d in zip(self.val_loader.dataset.class2ind, dices_per_class)
+        ]
+        dice_str = "\n".join(dice_str)
+        print(dice_str)
+        
+        avg_dice = torch.mean(dices_per_class).item()
+        print("avg_dice: {:.4f}".format(avg_dice))
+        print("Validation Loss: {:.4f} || Elapsed time: {}".format(
+            total_loss / len(self.val_loader),
+            timedelta(seconds=val_end),
+        ))
+        
+        return avg_dice, total_loss / len(self.val_loader)
+    
+
+
+    def train(self):
+        print(f'Start training..')
+
+        best_dice = 0.
+        
+        for epoch in range(1, self.max_epoch + 1):
+
+            train_loss = self.train_epoch(epoch)
+
+            # validation 주기에 따라 loss를 출력하고 best model을 저장합니다.
+            if epoch % self.val_interval == 0:
+                avg_dice, val_loss = self.validation(epoch)
+
+                if best_dice < avg_dice:
+                    print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}")
+                    best_dice = avg_dice
+                    self.save_model(epoch, best_dice)

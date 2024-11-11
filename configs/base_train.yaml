@@ -1,0 +1,24 @@
+image_root: /data/ephemeral/home/data/train/DCM
+label_root: /data/ephemeral/home/data/train/outputs_json
+
+model_name: fcn_resnet50
+pretrained: True
+
+batch_size: 8
+lr: 1e-4
+weight_decay: 1e-6
+
+threshod: 0.5
+
+seed: 42
+max_epoch: 100
+
+val_fold: 0
+val_interval: 5
+
+save_dir: ./checkpoints
+
+transform:
+  Resize:
+    width: 512
+    height: 512

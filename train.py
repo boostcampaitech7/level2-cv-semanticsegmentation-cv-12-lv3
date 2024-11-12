@@ -3,6 +3,7 @@ import os.path as osp
 
 import torch
 import random
+import warnings
 import numpy as np
 import torch.nn as nn
 import albumentations as A
@@ -11,13 +12,14 @@ import argparse
 import torch.optim as optim
 
 from tqdm.auto import tqdm
-from torch.utils.data import DataLoader
-from models.base_model import TorchvisionModel
 from trainer import Trainer
-
-
 from dataset import XRayDataset
 from omegaconf import OmegaConf
+from utils.wandb import set_wandb
+from torch.utils.data import DataLoader
+from models.base_model import TorchvisionModel
+
+warnings.filterwarnings('ignore')
 
 def set_seed(seed):
     torch.manual_seed(seed)
@@ -49,6 +51,7 @@ def setup(cfg):
 
 
 def main(cfg):
+    set_wandb(cfg)
     set_seed(cfg.seed)
 
     fnames, labels = setup(cfg)

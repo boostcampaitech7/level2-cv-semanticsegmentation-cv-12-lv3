@@ -1,5 +1,6 @@
 import os
 import time
+import wandb
 import torch
 import torch.nn as nn
 import os.path as osp
@@ -125,6 +126,7 @@ class Trainer:
             f"{c:<12}: {d.item():.4f}"
             for c, d in zip(self.val_loader.dataset.class2ind, dices_per_class)
         ]
+
         dice_str = "\n".join(dice_str)
         print(dice_str)
         
@@ -134,8 +136,10 @@ class Trainer:
             total_loss / len(self.val_loader),
             timedelta(seconds=val_end),
         ))
+
+        class_dice_dict = {f"{c}'s dice score" : d for c, d in zip(self.val_loader.dataset.class2ind, dices_per_class)}
         
-        return avg_dice, total_loss / len(self.val_loader)
+        return avg_dice, class_dice_dict, total_loss / len(self.val_loader)
     
 
 
@@ -149,10 +153,18 @@ class Trainer:
 
             train_loss = self.train_epoch(epoch)
 
+            wandb.log({
+                "Train Loss" : train_loss
+            }, step=epoch)
             # validation 주기에 따라 loss를 출력하고 best model을 저장합니다.
             if epoch % self.val_interval == 0:
-                avg_dice, val_loss = self.validation(epoch)
-
+                avg_dice, dices_per_class, val_loss = self.validation(epoch)
+                wandb.log({
+                    "Validation Loss" : val_loss,
+                    "Avg Dice Score" : avg_dice,
+                    **dices_per_class
+                }, step=epoch)
+                
                 if best_dice < avg_dice:
                     print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}")
                     best_dice = avg_dice

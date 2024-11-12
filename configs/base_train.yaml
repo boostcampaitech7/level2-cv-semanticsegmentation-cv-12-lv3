@@ -10,6 +10,15 @@ pretrained: True
 train_batch_size: 8
 val_batch_size: 4
 
+# image resize
+image_size: &image_size 512
+
+# transform 관련
+transform:
+  Resize:
+    width: *image_size
+    height: *image_size
+
 # 학습 관련 하이퍼파라미터
 lr: 1e-4
 weight_decay: 1e-6
@@ -27,8 +36,8 @@ threshold: 0.5
 # checkpoint 저장 경로
 save_dir: ./checkpoints/fcn_resnet50
 
-# transform 관련
-transform:
-  Resize:
-    width: 512
-    height: 512
+# wandb
+api_key: wandb 개인 key 작성
+team_name: CV_12_Segmantation
+project_name: initial project
+experiment_detail: relogin test

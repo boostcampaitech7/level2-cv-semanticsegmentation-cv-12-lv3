@@ -1,4 +1,5 @@
 from .base_model import UnetModel
+from .unet_transform import R2U_Net, AttU_Net, R2AttU_Net
 
 class ModelSelector():
     """
@@ -11,6 +12,10 @@ class ModelSelector():
     def __init__(self) -> None:
         self.model_classes = {
             "Unet" : UnetModel,
+            "R2U_Net" : R2U_Net,
+            "AttU_Net" : AttU_Net,
+            "R2AttU_Net" : R2AttU_Net
+            
         }
 
     def get_model(self, model_name, **model_parameter):

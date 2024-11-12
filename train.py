@@ -19,6 +19,7 @@ from torch.utils.data import DataLoader
 from models.base_model import UnetModel
 from loss.loss_selector import LossSelector
 from scheduler.scheduler_selector import SchedulerSelector
+from models.model_selector import ModelSelector
 
 warnings.filterwarnings('ignore')
 
@@ -94,17 +95,23 @@ def main(cfg):
     )
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = UnetModel(cfg.encoder_name)
+
+    # model 선택
+    model_selector = ModelSelector()
+    model = model_selector.get_model(cfg.model_name, **cfg.model_parameter)
 
     model.to(device)
 
+    # optimizer는 고정
     optimizer = optim.Adam(params=model.parameters(),
                            lr=cfg.lr,
                            weight_decay=cfg.weight_decay)
     
+    # scheduler 선택
     scheduler_selector = SchedulerSelector(optimizer)
     scheduler = scheduler_selector.get_scheduler(cfg.scheduler_name, **cfg.scheduler_parameter)
     
+    # loss 선택
     loss_selector = LossSelector()
     criterion = loss_selector.get_loss(cfg.loss_name, **cfg.loss_parameter)
 

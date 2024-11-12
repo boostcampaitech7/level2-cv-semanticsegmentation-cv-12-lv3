@@ -11,6 +11,7 @@ def set_wandb(configs):
                 'resize': configs['image_size'],
                 'batch_size': configs['train_batch_size'],
                 'loss_name': configs['loss_name'],
+                'scheduler_name': configs['scheduler_name'],
                 'learning_rate': configs['lr'],
                 'epoch': configs['max_epoch']
             }

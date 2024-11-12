@@ -28,6 +28,7 @@ class Trainer:
                  val_loader: DataLoader,
                  threshold: float,
                  optimizer: optim.Optimizer,
+                 scheduler: optim.lr_scheduler,
                  criterion: torch.nn.modules.loss._Loss,
                  max_epoch: int,
                  save_dir: str,
@@ -37,6 +38,7 @@ class Trainer:
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.optimizer = optimizer
+        self.scheduler = scheduler
         self.criterion = criterion
         self.max_epoch = max_epoch
         self.save_dir = save_dir
@@ -154,8 +156,10 @@ class Trainer:
             train_loss = self.train_epoch(epoch)
 
             wandb.log({
-                "Train Loss" : train_loss
+                "Train Loss" : train_loss,
+                "Learning Rate": self.scheduler.get_last_lr()[0]
             }, step=epoch)
+
             # validation 주기에 따라 loss를 출력하고 best model을 저장합니다.
             if epoch % self.val_interval == 0:
                 avg_dice, dices_per_class, val_loss = self.validation(epoch)
@@ -169,3 +173,5 @@ class Trainer:
                     print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}")
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
+
+            self.scheduler.step()

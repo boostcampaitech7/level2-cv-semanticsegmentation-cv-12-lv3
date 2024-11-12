@@ -29,6 +29,14 @@ loss_name: BCEWithLogitsLoss
 # loss에 필요한 parameter -> dict 형태로 작성
 loss_parameter: {}
 
+# scheduler 관련 설정
+scheduler_name: MultiStepLR
+
+# scheduler 필요한 parameter -> dict 형태로 작성
+scheduler_parameter: 
+  milestones: [70]
+  gamma: 0.5
+
 max_epoch: 100
 
 # random seed값
@@ -45,5 +53,5 @@ save_dir: ./checkpoints/fcn_resnet50
 # wandb
 api_key: wandb 개인 key 작성
 team_name: CV_12_Segmantation
-project_name: initial project
-experiment_detail: loss test
+project_name: 진행하는 실험의 큰 주제
+experiment_detail: 진행하는 실험의 이름

@@ -1,6 +1,5 @@
 from .base_loss import CustomBCEWithLogitsLoss
 
-
 class LossSelector():
     """
     loss를 새롭게 추가하기 위한 방법

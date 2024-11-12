@@ -18,6 +18,7 @@ from utils.wandb import set_wandb
 from torch.utils.data import DataLoader
 from models.base_model import TorchvisionModel
 from loss.loss_selector import LossSelector
+from scheduler.scheduler_selector import SchedulerSelector
 
 warnings.filterwarnings('ignore')
 
@@ -103,8 +104,11 @@ def main(cfg):
                            lr=cfg.lr,
                            weight_decay=cfg.weight_decay)
     
+    scheduler_selector = SchedulerSelector(optimizer)
+    scheduler = scheduler_selector.get_scheduler(cfg.scheduler_name, **cfg.scheduler_parameter)
+    
     loss_selector = LossSelector()
-    criterion = loss_selector.get_loss(cfg.loss_name)
+    criterion = loss_selector.get_loss(cfg.loss_name, **cfg.loss_parameter)
 
     trainer = Trainer(
         model=model,
@@ -113,6 +117,7 @@ def main(cfg):
         val_loader=valid_loader,
         threshold=cfg.threshold,
         optimizer=optimizer,
+        scheduler=scheduler,
         criterion=criterion,
         max_epoch=cfg.max_epoch,
         save_dir=cfg.save_dir,

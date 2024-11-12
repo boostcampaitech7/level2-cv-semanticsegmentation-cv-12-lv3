@@ -20,6 +20,7 @@ from models.base_model import UnetModel
 from loss.loss_selector import LossSelector
 from scheduler.scheduler_selector import SchedulerSelector
 from models.model_selector import ModelSelector
+from utils.notion import start_server, stop_server
 
 warnings.filterwarnings('ignore')
 
@@ -131,7 +132,6 @@ def main(cfg):
 
     trainer.train()
 
-
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/base_train.yaml")
@@ -141,4 +141,9 @@ if __name__=='__main__':
     with open(args.config, 'r') as f:
         cfg = OmegaConf.load(f)
     
+    # 노션 서버 사용 현황 업데이트
+    start_server(cfg.server_id, cfg.experiment_description, cfg.user_name)
+
     main(cfg)
+
+    stop_server(cfg.server_id)

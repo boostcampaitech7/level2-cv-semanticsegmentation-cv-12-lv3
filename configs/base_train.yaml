@@ -25,7 +25,7 @@ transform:
 lr: 1e-3
 weight_decay: 1e-6
 
-max_epoch: &max_epoch 20
+max_epoch: &max_epoch 2
 
 # loss 관련 설정 
 loss_name: Combined
@@ -61,14 +61,22 @@ seed: 42
 
 # validation 관련 인자
 val_fold: 0
-val_interval: 2
+val_interval: 1
 threshold: 0.5
 
 # checkpoint 저장 경로
 save_dir: ./checkpoints/Unet
 
 # wandb
-api_key: apikey를 입력해주세요
+api_key: 6719c512ca92adae09770aafb128622b6cdf145d
 team_name: CV_12_Segmantation
-project_name: Loss Experiment
-experiment_detail: Test
+project_name: Swin Unet 실험
+experiment_detail: swin unet epoch10 val5
+
+# notion
+# server_id는 서버0, 1, 2, 3
+# experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
+# user_name은 본인 이름 넣으시면 됩니다
+server_id: 서버2
+experiment_description: Swin Unet 실험중
+user_name: 재만

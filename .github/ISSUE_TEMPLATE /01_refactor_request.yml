@@ -1,12 +1,12 @@
-name: ✨ Feautre Report
-description: Suggest an idea for this project
-title: "[Feature] "
-labels: ["✨ Feature"]
+name: ♻️ Refactor Report
+description: Refactor Code or Structure
+title: "[Refactor] "
+labels: ["🛠️ Refactor"]
 body:
   - type: textarea
     attributes:
       label: 🌈 Background
-      description: 해당 이슈를 생성하게된 이유가 무엇인가요?
+      description: 해당 Code or Structure를 조정하는 이유가 무엇인가요?
       placeholder: 뭐든지 적어주세요~
     validations:
       required: true

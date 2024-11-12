@@ -4,7 +4,7 @@ import segmentation_models_pytorch as smp
 
 class UnetModel(nn.Module):
     """
-    Baseline Model from torchvision
+    Base Model Unet
     """
     def __init__(self,
                  encoer_name: str,
@@ -18,4 +18,4 @@ class UnetModel(nn.Module):
                               classes=classes)
 
     def forward(self, x: torch.Tensor):
-        return self.model(x)['out']
+        return self.model(x)

@@ -3,6 +3,9 @@ from torch.optim import lr_scheduler
 def multi_step_lr(optimizer, **scheduler_parameter):
     return lr_scheduler.MultiStepLR(optimizer, **scheduler_parameter)
 
+def cosine_annealing_lr(optimizer, **scheduler_parameter):
+    return lr_scheduler.CosineAnnealingLR(optimizer, **scheduler_parameter)
+
 class SchedulerSelector():
     """
     scheduler를 새롭게 추가하기 위한 방법
@@ -15,6 +18,7 @@ class SchedulerSelector():
     def __init__(self, optimizer) -> None:
         self.scheduler_classes = {
             "MultiStepLR" : multi_step_lr,
+            "CosineAnnealingLR" : cosine_annealing_lr
         }
         self.optimizer = optimizer
 

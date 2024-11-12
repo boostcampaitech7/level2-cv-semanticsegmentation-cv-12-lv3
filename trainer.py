@@ -156,6 +156,7 @@ class Trainer:
             train_loss = self.train_epoch(epoch)
 
             wandb.log({
+                "Epoch" : epoch,
                 "Train Loss" : train_loss,
                 "Learning Rate": self.scheduler.get_last_lr()[0]
             }, step=epoch)

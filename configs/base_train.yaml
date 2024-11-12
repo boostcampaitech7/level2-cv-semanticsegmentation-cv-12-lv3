@@ -23,6 +23,8 @@ transform:
 lr: 1e-4
 weight_decay: 1e-6
 
+max_epoch: &max_epoch 100
+
 # loss 관련 설정
 loss_name: BCEWithLogitsLoss
 
@@ -30,14 +32,11 @@ loss_name: BCEWithLogitsLoss
 loss_parameter: {}
 
 # scheduler 관련 설정
-scheduler_name: MultiStepLR
+scheduler_name: CosineAnnealingLR
 
 # scheduler 필요한 parameter -> dict 형태로 작성
 scheduler_parameter: 
-  milestones: [70]
-  gamma: 0.5
-
-max_epoch: 100
+  T_max: *max_epoch
 
 # random seed값
 seed: 42

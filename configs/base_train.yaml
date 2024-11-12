@@ -23,6 +23,12 @@ transform:
 lr: 1e-4
 weight_decay: 1e-6
 
+# loss 관련 설정
+loss_name: BCEWithLogitsLoss
+
+# loss에 필요한 parameter -> dict 형태로 작성
+loss_parameter: {}
+
 max_epoch: 100
 
 # random seed값
@@ -40,4 +46,4 @@ save_dir: ./checkpoints/fcn_resnet50
 api_key: wandb 개인 key 작성
 team_name: CV_12_Segmantation
 project_name: initial project
-experiment_detail: relogin test
+experiment_detail: loss test

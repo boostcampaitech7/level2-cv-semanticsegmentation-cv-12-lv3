@@ -5,7 +5,6 @@ import torch
 import random
 import warnings
 import numpy as np
-import torch.nn as nn
 import albumentations as A
 
 import argparse
@@ -18,6 +17,7 @@ from omegaconf import OmegaConf
 from utils.wandb import set_wandb
 from torch.utils.data import DataLoader
 from models.base_model import TorchvisionModel
+from loss.loss_selector import LossSelector
 
 warnings.filterwarnings('ignore')
 
@@ -103,7 +103,8 @@ def main(cfg):
                            lr=cfg.lr,
                            weight_decay=cfg.weight_decay)
     
-    criterion = nn.BCEWithLogitsLoss()
+    loss_selector = LossSelector()
+    criterion = loss_selector.get_loss(cfg.loss_name)
 
     trainer = Trainer(
         model=model,

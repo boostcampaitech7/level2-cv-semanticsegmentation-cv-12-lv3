@@ -10,6 +10,7 @@ def set_wandb(configs):
                 'model': configs['model_name'],
                 'resize': configs['image_size'],
                 'batch_size': configs['train_batch_size'],
+                'loss_name': configs['loss_name'],
                 'learning_rate': configs['lr'],
                 'epoch': configs['max_epoch']
             }

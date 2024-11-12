@@ -1,6 +1,14 @@
 # pths
 pths/
 
+# image 파일 제외
+*.png
+*.jpg
+*.jpeg
+
+# yaml 파일 제외
+*.yaml
+
 # python cache 제외
 __pycache__
 *.pyc

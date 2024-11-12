@@ -79,7 +79,7 @@ class Trainer:
                 pbar.set_postfix(loss=loss.item())
 
         train_end = time.time() - train_start 
-        print("Epoch {}, Train Loss: {:.4f} || Elapsed time: {} || ETA: {}".format(
+        print("Epoch {}, Train Loss: {:.4f} || Elapsed time: {} || ETA: {}\n".format(
             epoch,
             total_loss / len(self.train_loader),
             timedelta(seconds=train_end),
@@ -134,7 +134,7 @@ class Trainer:
         
         avg_dice = torch.mean(dices_per_class).item()
         print("avg_dice: {:.4f}".format(avg_dice))
-        print("Validation Loss: {:.4f} || Elapsed time: {}".format(
+        print("Validation Loss: {:.4f} || Elapsed time: {}\n".format(
             total_loss / len(self.val_loader),
             timedelta(seconds=val_end),
         ))
@@ -171,7 +171,7 @@ class Trainer:
                 }, step=epoch)
                 
                 if best_dice < avg_dice:
-                    print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}")
+                    print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}\n")
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
 

@@ -52,10 +52,7 @@ threshold: 0.5
 save_dir: ./checkpoints/Unet
 
 # wandb
-api_key: d364167d2267eb945c65844bdcaaa98a465e3377 
-# wandb 개인 key 작성
+api_key: wandb 개인 key 작성
 team_name: CV_12_Segmantation
-project_name: initial project
-# 진행하는 실험의 큰 주제
-experiment_detail: final test
-# 진행하는 실험의 이름
+project_name: 진행하는 실험의 큰 주제
+experiment_detail: 진행하는 실험의 이름

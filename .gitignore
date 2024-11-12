@@ -7,7 +7,7 @@ pths/
 *.jpeg
 
 # yaml 파일 제외
-*.yaml
+# *.yaml
 
 # python cache 제외
 __pycache__

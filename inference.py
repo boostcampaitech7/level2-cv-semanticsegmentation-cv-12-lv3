@@ -11,8 +11,6 @@ from tqdm.auto import tqdm
 from torch.utils.data import DataLoader
 from dataset import XRayInferenceDataset
 
-IMAGE_ROOT = "test/DCM"
-
 # mask map으로 나오는 인퍼런스 결과를 RLE로 인코딩 합니다.
 def encode_mask_to_rle(mask):
     '''
@@ -64,6 +62,8 @@ def inference(args, data_loader):
                         rle = encode_mask_to_rle(segm)
                         rles.append(rle)
                         filename_and_class.append(f"{data_loader.dataset.ind2class[c]}_{image_name}")
+                
+                pbar.update(1)
                     
     return rles, filename_and_class
 
@@ -71,14 +71,14 @@ def inference(args, data_loader):
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("model", type=str, help="Path to the model to use")
-    parser.add_argument("--image_root", type=str, default="/data/ephemeral/home/data/train/DCM")
+    parser.add_argument("--image_root", type=str, default="/data/ephemeral/home/data/test/DCM")
     parser.add_argument("--thr", type=float, default=0.5)
     parser.add_argument("--output", type=str, default="./output.csv")
     args = parser.parse_args()
 
     fnames = {
-        osp.relpath(osp.join(root, fname), start=IMAGE_ROOT)
-        for root, _, files in os.walk(IMAGE_ROOT)
+        osp.relpath(osp.join(root, fname), start=args.image_root)
+        for root, _, files in os.walk(args.image_root)
         for fname in files
         if osp.splitext(fname)[1].lower() == ".png"
     }

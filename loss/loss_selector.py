@@ -1,4 +1,9 @@
 from .base_loss import CustomBCEWithLogitsLoss
+from .dice_loss import CustomDiceLoss
+from .jaccard_loss import CustomJaccardLoss
+from .focal_loss import CustomFocalLoss
+from .tversky_loss import CustomTverskyLoss
+from .combined_loss import CombinedLoss
 
 class LossSelector():
     """
@@ -11,7 +16,24 @@ class LossSelector():
     def __init__(self) -> None:
         self.loss_classes = {
             "BCEWithLogitsLoss" : CustomBCEWithLogitsLoss,
+            "DiceLoss": CustomDiceLoss,
+            "JaccardLoss": CustomJaccardLoss,
+            "FocalLoss": CustomFocalLoss,
+            "TverskyLoss": CustomTverskyLoss
         }
 
     def get_loss(self, loss_name, **loss_parameter):
+        # Combined loss인 경우
+        if loss_name == "Combined":
+            losses = []
+            weights = []
+            
+            # cfg.losses에서 설정 가져오기
+            for loss_config in loss_parameter.get('losses', []):
+                loss_fn = self.loss_classes.get(loss_config['name'])(**loss_config.get('params', {}))
+                if loss_fn is not None:
+                    losses.append(loss_fn)
+                    weights.append(loss_config.get('weight', 1.0))
+            
+            return CombinedLoss(losses, weights)
         return self.loss_classes.get(loss_name, None)(**loss_parameter)

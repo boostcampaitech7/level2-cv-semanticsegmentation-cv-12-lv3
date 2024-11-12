@@ -68,7 +68,7 @@ threshold: 0.5
 save_dir: ./checkpoints/Unet
 
 # wandb
-api_key: api키를 입력합니다
+api_key: apikey를 입력해주세요
 team_name: CV_12_Segmantation
 project_name: Loss Experiment
 experiment_detail: Test

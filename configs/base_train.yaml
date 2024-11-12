@@ -3,8 +3,8 @@ image_root: /data/ephemeral/home/data/train/DCM
 label_root: /data/ephemeral/home/data/train/outputs_json
 
 # 모델명 및 사전 학습 여부
-model_name: fcn_resnet50
-pretrained: True
+model_name: Unet
+encoder_name: efficientnet-b0
 
 # batch_size
 train_batch_size: 8

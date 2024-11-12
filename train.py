@@ -16,7 +16,7 @@ from dataset import XRayDataset
 from omegaconf import OmegaConf
 from utils.wandb import set_wandb
 from torch.utils.data import DataLoader
-from models.base_model import TorchvisionModel
+from models.base_model import UnetModel
 from loss.loss_selector import LossSelector
 from scheduler.scheduler_selector import SchedulerSelector
 
@@ -94,9 +94,7 @@ def main(cfg):
     )
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    model = TorchvisionModel(cfg.model_name,
-                             train_dataset.num_classes,
-                             cfg.pretrained)
+    model = UnetModel(cfg.encoder_name)
 
     model.to(device)
 

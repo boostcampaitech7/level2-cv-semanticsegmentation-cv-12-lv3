@@ -47,7 +47,7 @@ val_interval: 5
 threshold: 0.5
 
 # checkpoint 저장 경로
-save_dir: ./checkpoints/fcn_resnet50
+save_dir: ./checkpoints/Unet
 
 # wandb
 api_key: wandb 개인 key 작성

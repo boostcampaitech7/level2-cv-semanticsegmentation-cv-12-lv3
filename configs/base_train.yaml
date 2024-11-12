@@ -72,3 +72,11 @@ api_key: apikey를 입력해주세요
 team_name: CV_12_Segmantation
 project_name: Loss Experiment
 experiment_detail: Test
+
+# notion
+# server_id는 서버0, 1, 2, 3
+# experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
+# user_name은 본인 이름 넣으시면 됩니다
+server_id: 서버2
+experiment_description: Swin Unet 실험중
+user_name: 재만

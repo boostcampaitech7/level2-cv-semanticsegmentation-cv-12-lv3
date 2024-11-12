@@ -58,12 +58,12 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
         <td><a href="https://github.com/oweixx" target="_blank">방민혁</a></td>
     </tr>
     <tr align="center">
-        <td>T7103</td>
-        <td>T7156</td>
-        <td>T7158</td>
         <td>T7208</td>
-        <td>T7222</td>
+        <td>T7221</td>
         <td>T7225</td>
+        <td>T7138</td>
+        <td>T7253</td>
+        <td>T7158</td>
     </tr>
 </table>
 

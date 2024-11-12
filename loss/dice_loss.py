@@ -11,8 +11,8 @@ class CustomDiceLoss(nn.Module):
 
     def forward(self, predictions, targets):
         predictions = torch.sigmoid(predictions)
-        predictions = predictions.view(-1)
-        targets = targets.view(-1)
+        predictions = predictions.contiguous().view(-1)
+        targets = targets.contiguous().view(-1)
         
         intersection = (predictions * targets).sum()
         dice = (2. * intersection + self.smooth) / (predictions.sum() + targets.sum() + self.smooth)

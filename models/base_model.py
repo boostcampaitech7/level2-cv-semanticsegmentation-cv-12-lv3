@@ -13,3 +13,15 @@ class UnetModel(nn.Module):
 
     def forward(self, x: torch.Tensor):
         return self.model(x)
+    
+class UnetPlusPlus(nn.Module):
+    """
+    Unet++ Model
+    """
+    def __init__(self,
+                 **kwargs):
+        super(UnetPlusPlus, self).__init__()
+        self.model = smp.UnetPlusPlus(**kwargs)
+
+    def forward(self, x: torch.Tensor):
+        return self.model(x)

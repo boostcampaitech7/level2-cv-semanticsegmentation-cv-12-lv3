@@ -10,4 +10,3 @@ class CustomBCEWithLogitsLoss(nn.Module):
 
     def forward(self, predictions, targets):
         return self.loss(predictions, targets)
-

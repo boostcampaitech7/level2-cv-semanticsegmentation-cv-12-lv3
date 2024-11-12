@@ -21,3 +21,6 @@ wandb/
 
 # 결과 파일 제외
 *.csv
+
+# visualization 폴더 제외
+visualization/

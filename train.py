@@ -138,12 +138,13 @@ if __name__=='__main__':
 
     args = parser.parse_args()
     
-    with open(args.config, 'r') as f:
-        cfg = OmegaConf.load(f)
-    
-    # 노션 서버 사용 현황 업데이트
-    start_server(cfg.server_id, cfg.experiment_description, cfg.user_name)
+    try:
+        with open(args.config, 'r') as f:
+            cfg = OmegaConf.load(f)
+        
+        # 노션 서버 사용 현황 업데이트
+        start_server(cfg.server_id, cfg.experiment_description, cfg.user_name)
 
-    main(cfg)
-
-    stop_server(cfg.server_id)
+        main(cfg)
+    finally:
+        stop_server(cfg.server_id)

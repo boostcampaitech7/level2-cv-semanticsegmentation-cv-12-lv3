@@ -3,8 +3,27 @@ from datetime import datetime
 import pytz
 import time
 
-notion = Client(auth="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")
-database_id = "13b9d71d84118071af86c4257c7da330"
+# txt 파일에서 불러오기
+def read_notion_credentials():
+    try:
+        with open('/data/ephemeral/home/notion_credentials.txt', 'r') as f:
+            auth_key = f.readline().strip()
+            database_id = f.readline().strip()
+        return auth_key, database_id
+    except FileNotFoundError:
+        raise FileNotFoundError("notion_credentials.txt 파일을 찾을 수 없습니다.")
+    except Exception as e:
+        raise Exception(f"Credentials 읽기 오류: {str(e)}")
+    
+def init_notion_client():
+    try:
+        auth_key, db_id = read_notion_credentials()
+        return Client(auth=auth_key), db_id
+    except Exception as e:
+        print(f"Notion 클라이언트 초기화 실패: {str(e)}")
+        raise
+
+notion, database_id = init_notion_client()
 
 # 페이지 내용 삭제
 def clear_page_content(page_id):
@@ -143,22 +162,3 @@ def check_database_structure():
     except Exception as e:
         print(f"데이터베이스 구조 확인 실패: {str(e)}")
 
-# if __name__=='__main__':
-#     # 데이터베이스 구조 확인
-#     check_database_structure()
-#     # 서버 상태 변경 테스트
-#     server_id = "서버1"
-#     # 여기다가 실험 내용 작성 (없을 시 빈칸으로)
-#     experiment_description = ""
-#     # 사용자 이름 작성
-#     user_name = "JM"
-    
-#     # 서버 시작 (RUN으로 이동)
-#     start_server(server_id, experiment_description, user_name)
-    
-#     # # 5초 대기 (테스트용)
-#     import time
-#     time.sleep(15)
-    
-#     # # 서버 중지 (READY로 이동)
-#     stop_server(server_id)

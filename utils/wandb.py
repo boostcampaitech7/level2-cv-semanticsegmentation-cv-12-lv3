@@ -19,14 +19,14 @@ def set_wandb(configs):
 
     return wandb_run
 
-def download_ckpt_from_wandb():
+def download_ckpt_from_wandb(experiment_detail, checkpoint_name):
     ## 현재 임시로 미사용. 팀원과 회의 필요 및 구현 확인 안 해봄
     # Wandb 작업 생성
-    run = wandb.init()
+    api = wandb.Api()
 
     # Wandb 아티팩트 검색
-    artifact = run.use_artifact("HandBoneSemanticSeg:best-Dice")
-    artifact_dir = artifact.download(path_prefix=f'.pt')
+    artifact = api.artifact(f"{experiment_detail}:best-Dice")
+    artifact_dir = artifact.download(path_prefix=checkpoint_name)
     return artifact_dir
 
 # TODO: 아티팩트에 모델 검증 결과 이미지 테이블 추가

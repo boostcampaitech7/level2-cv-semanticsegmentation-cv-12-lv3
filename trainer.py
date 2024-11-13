@@ -24,7 +24,7 @@ class Trainer:
     def __init__(self, 
                  model: nn.Module,
                  device: torch.device,
-                 wandb_run: wandb.Run, 
+                 wandb_run: wandb.run, 
                  train_loader: DataLoader,
                  val_loader: DataLoader,
                  threshold: float,

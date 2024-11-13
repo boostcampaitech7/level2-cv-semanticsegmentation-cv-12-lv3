@@ -27,11 +27,27 @@ weight_decay: 1e-6
 
 max_epoch: &max_epoch 20
 
-# loss 관련 설정
-loss_name: BCEWithLogitsLoss
+# loss 관련 설정 
+loss_name: Combined
 
-# loss에 필요한 parameter -> dict 형태로 작성
-loss_parameter: {}
+# 단일 loss 사용시에 필요한 parameter -> dict 형태로 작성
+# loss_parameter: {}
+
+# combo loss 사용시
+loss_parameter:
+  losses:
+    - name: BCEWithLogitsLoss
+      weight: 0.5
+      params: {}
+    - name: JaccardLoss
+      weight: 0.5
+      params:
+        smooth: 1e-5
+    - name: DiceLoss
+      weight: 0.5
+      params:
+        smooth: 1e-5
+        
 
 # scheduler 관련 설정
 scheduler_name: CosineAnnealingLR
@@ -52,7 +68,15 @@ threshold: 0.5
 save_dir: ./checkpoints/Unet
 
 # wandb
-api_key: wandb 개인 key 작성
+api_key: apikey를 입력해주세요
 team_name: CV_12_Segmantation
-project_name: 진행하는 실험의 큰 주제
-experiment_detail: 진행하는 실험의 이름
+project_name: Loss Experiment
+experiment_detail: Test
+
+# notion
+# server_id는 서버0, 1, 2, 3
+# experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
+# user_name은 본인 이름 넣으시면 됩니다
+server_id: 서버2
+experiment_description: Swin Unet 실험중
+user_name: 재만

@@ -54,7 +54,7 @@ def setup(cfg):
 
 
 def main(cfg):
-    set_wandb(cfg)
+    wandb_run = set_wandb(cfg)
     set_seed(cfg.seed)
 
     fnames, labels = setup(cfg)
@@ -119,6 +119,7 @@ def main(cfg):
     trainer = Trainer(
         model=model,
         device=device,
+        wandb_run=wandb_run,
         train_loader=train_loader,
         val_loader=valid_loader,
         threshold=cfg.threshold,

@@ -232,7 +232,17 @@ class R2U_Net(nn.Module):
         self.Up_RRCNN2 = RRCNN_block(ch_in=128, ch_out=64,t=t)
 
         self.Conv_1x1 = nn.Conv2d(64,output_ch,kernel_size=1,stride=1,padding=0)
+        # 가중치 초기화
+        self.initialize_weights()
+        
+    def initialize_weights(model):
+        for m in model.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
 
+   
 
     def forward(self,x):
         # encoding path

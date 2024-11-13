@@ -61,7 +61,7 @@ class Trainer:
         torch.save(self.model, output_path)
         return output_path
 
-    def upload_ckpt_to_wandb(wandb_run, checkpoint_path):
+    def upload_ckpt_to_wandb(self, wandb_run, checkpoint_path):
         # Wandb 아티팩트 정의(아티팩트=모델, 데이터셋, 테이블 등의 잡동사니)
         print("현재 완디비 명: ",wandb_run.name)
         artifact = wandb.Artifact(name=wandb_run.name, type="model")

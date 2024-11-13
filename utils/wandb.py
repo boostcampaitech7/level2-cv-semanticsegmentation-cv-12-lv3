@@ -1,4 +1,3 @@
-import osp
 import wandb
 
 def set_wandb(configs):
@@ -20,7 +19,7 @@ def set_wandb(configs):
 
     return wandb_run
 
-def download_ckpt_from_wandb()
+def download_ckpt_from_wandb():
     ## 현재 임시로 미사용. 팀원과 회의 필요 및 구현 확인 안 해봄
     # Wandb 작업 생성
     run = wandb.init()

@@ -1,0 +1,109 @@
+import os
+import cv2
+import json
+import shutil
+import albumentations as A
+
+# Augmentation 정의
+transform = A.Compose([
+    A.HorizontalFlip(p=1),
+    A.Emboss(p=1),
+    A.CLAHE(p=1)
+])
+
+def augment_and_save_images(source_dir, dest_dir):
+    """
+    주어진 source_dir의 이미지를 변형하여 dest_dir에 저장하는 함수.
+    """
+    # source_dir 내부의 모든 ID 폴더를 검색
+    for folder in os.listdir(source_dir):
+        folder_path = os.path.join(source_dir, folder)
+        if not os.path.isdir(folder_path):
+            continue
+        
+        # 각 ID 폴더 내의 이미지 파일 검색
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.png'):
+                file_path = os.path.join(folder_path, filename)
+                
+                # 이미지 파일 읽기
+                image = cv2.imread(file_path)
+                if image is None:
+                    print(f"Error reading {file_path}")
+                    continue
+                
+                # 변형 적용
+                augmented = transform(image=image)['image']
+                
+                # 새로운 폴더명과 파일명 생성
+                new_folder = f'ID1{folder[2:]}'
+                new_folder_path = os.path.join(dest_dir, new_folder)
+                os.makedirs(new_folder_path, exist_ok=True)
+                
+                # 기존 파일명에서 숫자 부분 추출 후 수정
+                new_filename = filename.replace('image', 'image1')
+                new_file_path = os.path.join(new_folder_path, new_filename)
+                
+                # 변형된 이미지 저장
+                cv2.imwrite(new_file_path, augmented)
+                print(f"Saved transformed image: {new_file_path}")
+
+
+def flip_points_horizontally(points, width):
+    """
+    좌우 반전을 위해 x 좌표를 반전합니다.
+    """
+    return [[width - x, y] for x, y in points]
+
+def process_json_files(source_dir, dest_dir, image_width):
+    """
+    주어진 source_dir의 JSON 파일을 읽어 변형된 points 좌표를 새로운 JSON으로 저장합니다.
+    """
+    for folder in os.listdir(source_dir):
+        folder_path = os.path.join(source_dir, folder)
+        if not os.path.isdir(folder_path):
+            continue
+        
+        # 새로운 폴더 생성 (ID 앞에 1 추가)
+        new_folder = f"ID1{folder[2:]}"
+        new_folder_path = os.path.join(dest_dir, new_folder)
+        os.makedirs(new_folder_path, exist_ok=True)
+
+        # JSON 파일 변환
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.json'):
+                file_path = os.path.join(folder_path, filename)
+                
+                # JSON 파일 읽기
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                
+                # 좌우 반전된 points 좌표 생성
+                for annotation in data['annotations']:
+                    annotation['points'] = flip_points_horizontally(annotation['points'], image_width)
+                
+                # 새로운 파일명 생성
+                new_filename = filename.replace('image', 'image1')
+                new_file_path = os.path.join(new_folder_path, new_filename)
+                
+                # 변형된 JSON 저장
+                with open(new_file_path, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=4)
+                
+                print(f"Saved transformed JSON: {new_file_path}")
+
+# 원본 데이터 폴더와 변형된 데이터 저장 폴더 경로 설정
+source_dir = '/data/ephemeral/home/data/train/DCM'
+dest_dir = '/data/ephemeral/home/data/train/DCM'
+
+# Augmentation 이미지 생성 함수 실행
+augment_and_save_images(source_dir, dest_dir)
+
+
+# 원본 데이터 폴더와 변형된 데이터 저장 폴더 경로 설정
+source_json_dir = '/data/ephemeral/home/data/train/outputs_json'
+dest_json_dir = '/data/ephemeral/home/data/train/outputs_json'
+image_width = 2048  # 이미지의 너비 (필요시 실제 이미지 크기로 변경)
+
+# Augmentation 적용 json파일 생성 함수 실행
+process_json_files(source_json_dir, dest_json_dir, image_width)

@@ -18,7 +18,7 @@ class ModelSelector():
             "Unet" : UnetModel,
             "R2U_Net" : R2U_Net,
             "AttU_Net" : AttU_Net,
-            "R2AttU_Net" : R2AttU_Net
+            "R2AttU_Net" : R2AttU_Net,
             
             "UnetPlusPlus": UnetPlusPlus,
             "Swin" : SwinUnet

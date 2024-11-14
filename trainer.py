@@ -188,6 +188,7 @@ class Trainer:
                     print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}\n")
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
-                    self.upload_ckpt_to_wandb(self.wandb_run, before_path)
+                    
 
             self.scheduler.step()
+        self.upload_ckpt_to_wandb(self.wandb_run, before_path)

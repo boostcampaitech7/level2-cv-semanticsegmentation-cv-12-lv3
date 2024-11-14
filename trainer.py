@@ -159,7 +159,7 @@ class Trainer:
             wandb.log({
                 "Epoch" : epoch,
                 "Train Loss" : train_loss,
-                "Learning Rate": self.scheduler.get_last_lr()[0]
+                "Learning Rate": self.optimizer.param_groups[0]['lr']
             }, step=epoch)
 
             # validation 주기에 따라 loss를 출력하고 best model을 저장합니다.
@@ -176,4 +176,4 @@ class Trainer:
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
 
-            self.scheduler.step()
+                self.scheduler.step(avg_dice)

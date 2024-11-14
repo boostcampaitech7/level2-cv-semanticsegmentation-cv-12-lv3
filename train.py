@@ -16,7 +16,6 @@ from dataset import XRayDataset
 from omegaconf import OmegaConf
 from utils.wandb import set_wandb
 from torch.utils.data import DataLoader
-from models.base_model import UnetModel
 from loss.loss_selector import LossSelector
 from scheduler.scheduler_selector import SchedulerSelector
 from models.model_selector import ModelSelector

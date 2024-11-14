@@ -53,7 +53,7 @@ def setup(cfg):
 
 
 def main(cfg):
-    set_wandb(cfg)
+    wandb_run = set_wandb(cfg)
     set_seed(cfg.seed)
 
     fnames, labels = setup(cfg)
@@ -103,7 +103,7 @@ def main(cfg):
     model.to(device)
 
     # optimizer는 고정
-    optimizer = optim.Adam(params=model.parameters(),
+    optimizer = optim.AdamW(params=model.parameters(),
                            lr=cfg.lr,
                            weight_decay=cfg.weight_decay)
     
@@ -118,6 +118,7 @@ def main(cfg):
     trainer = Trainer(
         model=model,
         device=device,
+        wandb_run=wandb_run,
         train_loader=train_loader,
         val_loader=valid_loader,
         threshold=cfg.threshold,

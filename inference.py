@@ -74,6 +74,7 @@ if __name__=="__main__":
     parser.add_argument("--image_root", type=str, default="/data/ephemeral/home/data/test/DCM")
     parser.add_argument("--thr", type=float, default=0.5)
     parser.add_argument("--output", type=str, default="./output.csv")
+    parser.add_argument("--resize", type=int, default=512, help="Size to resize images (both width and height)")
     args = parser.parse_args()
 
     fnames = {
@@ -83,7 +84,7 @@ if __name__=="__main__":
         if osp.splitext(fname)[1].lower() == ".png"
     }
 
-    tf = A.Resize(512, 512)
+    tf = A.Resize(height=args.resize, width=args.resize)
 
     test_dataset = XRayInferenceDataset(fnames,
                                         args.image_root,

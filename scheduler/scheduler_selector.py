@@ -1,12 +1,21 @@
 from torch.optim import lr_scheduler
+from cosine_annealing_warmup import CosineAnnealingWarmupRestarts
 
 # MultiStepLR
 def multi_step_lr(optimizer, **scheduler_parameter):
     return lr_scheduler.MultiStepLR(optimizer, **scheduler_parameter)
 
+# ReduceLROnPlateau
+def reduce_lr_on_plateau(optimizer, **scheduler_parameter):
+    return lr_scheduler.ReduceLROnPlateau(optimizer, **scheduler_parameter)
+
 # CosineAnnealingLR
 def cosine_annealing_lr(optimizer, **scheduler_parameter):
     return lr_scheduler.CosineAnnealingLR(optimizer, **scheduler_parameter)
+
+# CosineAnnealingWarmupRestarts
+def cosine_annealing_warm_up_restarts_lr(optimizer, **scheduler_parameter):
+    return CosineAnnealingWarmupRestarts(optimizer, **scheduler_parameter)
 
 class SchedulerSelector():
     """
@@ -20,7 +29,9 @@ class SchedulerSelector():
     def __init__(self, optimizer) -> None:
         self.scheduler_classes = {
             "MultiStepLR" : multi_step_lr,
-            "CosineAnnealingLR" : cosine_annealing_lr
+            "ReduceLROnPlateau" : reduce_lr_on_plateau,
+            "CosineAnnealingLR" : cosine_annealing_lr,
+            "CosineAnnealingWarmupRestarts" : cosine_annealing_warm_up_restarts_lr
         }
         self.optimizer = optimizer
 

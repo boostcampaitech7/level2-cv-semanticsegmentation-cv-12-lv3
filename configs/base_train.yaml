@@ -80,7 +80,7 @@ save_dir: ./checkpoints/Unet
 api_key: 본인 wandb api key 입력
 team_name: CV_12_Segmantation
 project_name: 실험의 큰 주제
-experiment_detail: 실험 detail 입력
+experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (space 불가)
 
 # notion
 # server_id는 서버0, 1, 2, 3

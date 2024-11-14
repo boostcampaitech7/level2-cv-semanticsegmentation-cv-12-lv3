@@ -8,12 +8,12 @@ model_parameter:
   encoder_name: efficientnet-b0
   classes: 29
 
-# batch_size
+# batch_size (4 or 2) 고정
 train_batch_size: 4
 val_batch_size: 4
 
-# image resize
-image_size: &image_size 512
+# image resize 1024로 고정
+image_size: &image_size 1024
 
 # transform 관련
 transform:
@@ -25,7 +25,7 @@ transform:
 lr: 1e-3
 weight_decay: 1e-6
 
-max_epoch: &max_epoch 20
+max_epoch: &max_epoch 100
 
 # loss 관련 설정 
 loss_name: Combined
@@ -36,17 +36,21 @@ loss_name: Combined
 # combo loss 사용시
 loss_parameter:
   losses:
-    - name: BCEWithLogitsLoss
-      weight: 0.5
-      params: {}
-    - name: JaccardLoss
-      weight: 0.5
-      params:
-        smooth: 1e-5
     - name: DiceLoss
       weight: 0.5
       params:
-        smooth: 1e-5
+	      smooth: 1e-5
+    - name: TverskyLoss
+      weight: 0.5
+      params:
+	      alpha: 0.3
+	      beta: 0.7
+	      smooth: 1e-5
+    - name: FocalLoss
+      weight: 0.5
+      params:
+        alpha: 0.25
+        gamma: 2.0
         
 
 # scheduler 관련 설정
@@ -64,24 +68,24 @@ scheduler_parameter:
 # random seed값
 seed: 42
 
-# validation 관련 인자
+# validation 관련 인자 2번 폴드로 고정
 val_fold: 2
-val_interval: 2
+val_interval: 5
 threshold: 0.5
 
 # checkpoint 저장 경로
 save_dir: ./checkpoints/Unet
 
 # wandb
-api_key: apikey를 입력해주세요
+api_key: 본인 wandb api key 입력
 team_name: CV_12_Segmantation
 project_name: 실험의 큰 주제
-experiment_detail: 실험 명
+experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (space 불가)
 
 # notion
 # server_id는 서버0, 1, 2, 3
 # experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
 # user_name은 본인 이름 넣으시면 됩니다
 server_id: 서버N
-experiment_description: 실험 설명
+experiment_description : 실험 내용
 user_name: 이름

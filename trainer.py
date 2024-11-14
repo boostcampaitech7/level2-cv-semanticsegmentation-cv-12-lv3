@@ -24,6 +24,7 @@ class Trainer:
     def __init__(self, 
                  model: nn.Module,
                  device: torch.device,
+                 wandb_run: wandb.run, 
                  train_loader: DataLoader,
                  val_loader: DataLoader,
                  threshold: float,
@@ -35,6 +36,7 @@ class Trainer:
                  val_interval: int):
         self.model = model
         self.device = device
+        self.wandb_run = wandb_run
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.optimizer = optimizer
@@ -58,6 +60,17 @@ class Trainer:
         output_path = osp.join(self.save_dir, f"best_{epoch}epoch_{dice_score:.4f}.pt")
         torch.save(self.model, output_path)
         return output_path
+
+    def upload_ckpt_to_wandb(self, wandb_run, checkpoint_path):
+        # Wandb 아티팩트 정의(아티팩트=모델, 데이터셋, 테이블 등의 잡동사니)
+        # yaml config에서 experiment_detail로 설정한 이름으로 이름 설정
+        artifact = wandb.Artifact(name=wandb_run.name, type="model")
+
+        # 아티팩트에 모델 체크포인트 추가
+        artifact.add_file(local_path=checkpoint_path, name='models/'+osp.basename(checkpoint_path))
+
+        # 아티팩트를 Wandb에 저장
+        wandb_run.log_artifact(artifact, aliases=["best-Dice"])
 
 
     def train_epoch(self, epoch):
@@ -159,7 +172,7 @@ class Trainer:
             wandb.log({
                 "Epoch" : epoch,
                 "Train Loss" : train_loss,
-                "Learning Rate": self.scheduler.get_last_lr()[0]
+                "Learning Rate": self.optimizer.param_groups[0]['lr']
             }, step=epoch)
 
             # validation 주기에 따라 loss를 출력하고 best model을 저장합니다.
@@ -175,5 +188,7 @@ class Trainer:
                     print(f"Best performance at epoch: {epoch}, {best_dice:.4f} -> {avg_dice:.4f}\n")
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
+                    
 
-            self.scheduler.step()
+                self.scheduler.step(avg_dice)
+        self.upload_ckpt_to_wandb(self.wandb_run, before_path)

@@ -16,7 +16,6 @@ from dataset import XRayDataset
 from omegaconf import OmegaConf
 from utils.wandb import set_wandb
 from torch.utils.data import DataLoader
-from models.base_model import UnetModel
 from loss.loss_selector import LossSelector
 from scheduler.scheduler_selector import SchedulerSelector
 from models.model_selector import ModelSelector
@@ -54,7 +53,7 @@ def setup(cfg):
 
 
 def main(cfg):
-    set_wandb(cfg)
+    wandb_run = set_wandb(cfg)
     set_seed(cfg.seed)
 
     fnames, labels = setup(cfg)
@@ -119,6 +118,7 @@ def main(cfg):
     trainer = Trainer(
         model=model,
         device=device,
+        wandb_run=wandb_run,
         train_loader=train_loader,
         val_loader=valid_loader,
         threshold=cfg.threshold,

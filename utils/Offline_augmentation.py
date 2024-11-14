@@ -7,8 +7,8 @@ import albumentations as A
 # Augmentation 정의
 transform = A.Compose([
     A.HorizontalFlip(p=1),
-    A.Emboss(p=1),
-    A.CLAHE(p=1)
+    A.Emboss(alpha=(0.5, 0.9), strength=(1.0, 1.5), p=1),   # 엠보싱 효과
+    A.CLAHE(clip_limit=[2.0, 2.0], tile_grid_size=(8, 8), p=1.0),
 ])
 
 def augment_and_save_images(source_dir, dest_dir):
@@ -106,4 +106,4 @@ dest_json_dir = '/data/ephemeral/home/data/train/outputs_json'
 image_width = 2048  # 이미지의 너비 (필요시 실제 이미지 크기로 변경)
 
 # Augmentation 적용 json파일 생성 함수 실행
-process_json_files(source_json_dir, dest_json_dir, image_width)
+#process_json_files(source_json_dir, dest_json_dir, image_width)

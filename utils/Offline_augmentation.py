@@ -1,7 +1,7 @@
 import os
 import cv2
 import json
-import shutil
+from tqdm import tqdm
 import albumentations as A
 
 # Augmentation 정의
@@ -11,18 +11,17 @@ transform = A.Compose([
     A.CLAHE(clip_limit=[2.0, 2.0], tile_grid_size=(8, 8), p=1.0),
 ])
 
-def augment_and_save_images(source_dir, dest_dir):
+def augment_and_save_images(source_dir):
     """
     주어진 source_dir의 이미지를 변형하여 dest_dir에 저장하는 함수.
     """
-    # source_dir 내부의 모든 ID 폴더를 검색
     for folder in os.listdir(source_dir):
         folder_path = os.path.join(source_dir, folder)
         if not os.path.isdir(folder_path):
             continue
-        
+
         # 각 ID 폴더 내의 이미지 파일 검색
-        for filename in os.listdir(folder_path):
+        for filename in tqdm(os.listdir(folder_path), desc=f"Processing {folder}"):
             if filename.endswith('.png'):
                 file_path = os.path.join(folder_path, filename)
                 
@@ -32,21 +31,21 @@ def augment_and_save_images(source_dir, dest_dir):
                     print(f"Error reading {file_path}")
                     continue
                 
-                # 변형 적용
+                # Augmentation 적용
                 augmented = transform(image=image)['image']
                 
-                # 새로운 폴더명과 파일명 생성
-                new_folder = f'ID1{folder[2:]}'
-                new_folder_path = os.path.join(dest_dir, new_folder)
-                os.makedirs(new_folder_path, exist_ok=True)
+                # 새로운 파일명 생성 ('image' 뒤에 '1' 추가)
+                if filename.startswith("image"):
+                    new_filename = filename.replace("image", "image1", 1)
+                else:
+                    new_filename = "1" + filename
                 
-                # 기존 파일명에서 숫자 부분 추출 후 수정
-                new_filename = filename.replace('image', 'image1')
-                new_file_path = os.path.join(new_folder_path, new_filename)
+                new_file_path = os.path.join(folder_path, new_filename)
                 
                 # 변형된 이미지 저장
                 cv2.imwrite(new_file_path, augmented)
                 print(f"Saved transformed image: {new_file_path}")
+
 
 
 def flip_points_horizontally(points, width):
@@ -55,7 +54,7 @@ def flip_points_horizontally(points, width):
     """
     return [[width - x, y] for x, y in points]
 
-def process_json_files(source_dir, dest_dir, image_width):
+def process_json_files(source_dir, image_width):
     """
     주어진 source_dir의 JSON 파일을 읽어 변형된 points 좌표를 새로운 JSON으로 저장합니다.
     """
@@ -63,14 +62,9 @@ def process_json_files(source_dir, dest_dir, image_width):
         folder_path = os.path.join(source_dir, folder)
         if not os.path.isdir(folder_path):
             continue
-        
-        # 새로운 폴더 생성 (ID 앞에 1 추가)
-        new_folder = f"ID1{folder[2:]}"
-        new_folder_path = os.path.join(dest_dir, new_folder)
-        os.makedirs(new_folder_path, exist_ok=True)
 
         # JSON 파일 변환
-        for filename in os.listdir(folder_path):
+        for filename in tqdm(os.listdir(folder_path), desc=f"Processing JSON {folder}"):
             if filename.endswith('.json'):
                 file_path = os.path.join(folder_path, filename)
                 
@@ -82,9 +76,13 @@ def process_json_files(source_dir, dest_dir, image_width):
                 for annotation in data['annotations']:
                     annotation['points'] = flip_points_horizontally(annotation['points'], image_width)
                 
-                # 새로운 파일명 생성
-                new_filename = filename.replace('image', 'image1')
-                new_file_path = os.path.join(new_folder_path, new_filename)
+                # 새로운 파일명 생성 ('image' 뒤에 '1' 추가)
+                if filename.startswith("image"):
+                    new_filename = filename.replace("image", "image1", 1)
+                else:
+                    new_filename = "1" + filename
+                
+                new_file_path = os.path.join(folder_path, new_filename)
                 
                 # 변형된 JSON 저장
                 with open(new_file_path, 'w', encoding='utf-8') as f:
@@ -92,18 +90,11 @@ def process_json_files(source_dir, dest_dir, image_width):
                 
                 print(f"Saved transformed JSON: {new_file_path}")
 
-# 원본 데이터 폴더와 변형된 데이터 저장 폴더 경로 설정
-source_dir = '/data/ephemeral/home/data/train/DCM'
-dest_dir = '/data/ephemeral/home/data/train/DCM'
-
-# Augmentation 이미지 생성 함수 실행
-augment_and_save_images(source_dir, dest_dir)
-
-
-# 원본 데이터 폴더와 변형된 데이터 저장 폴더 경로 설정
+# 원본 데이터 폴더 경로 설정
+source_image_dir = '/data/ephemeral/home/data/train/DCM'
 source_json_dir = '/data/ephemeral/home/data/train/outputs_json'
-dest_json_dir = '/data/ephemeral/home/data/train/outputs_json'
-image_width = 2048  # 이미지의 너비 (필요시 실제 이미지 크기로 변경)
+image_width = 2048  # 이미지의 너비
 
-# Augmentation 적용 json파일 생성 함수 실행
-#process_json_files(source_json_dir, dest_json_dir, image_width)
+# Augmentation 적용 (이미지 및 JSON 파일)
+augment_and_save_images(source_image_dir)
+process_json_files(source_json_dir, image_width)

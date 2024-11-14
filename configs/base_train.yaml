@@ -39,13 +39,13 @@ loss_parameter:
     - name: DiceLoss
       weight: 0.5
       params:
-	      smooth: 1e-5
+        smooth: 1e-5
     - name: TverskyLoss
       weight: 0.5
       params:
-	      alpha: 0.3
-	      beta: 0.7
-	      smooth: 1e-5
+        alpha: 0.3
+        beta: 0.7
+        smooth: 1e-5
     - name: FocalLoss
       weight: 0.5
       params:

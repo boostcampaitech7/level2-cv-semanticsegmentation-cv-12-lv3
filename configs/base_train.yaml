@@ -12,6 +12,9 @@ model_parameter:
 train_batch_size: 4
 val_batch_size: 4
 
+# val_num_worker 지정
+num_workers: 4
+
 # image resize 1024로 고정
 image_size: &image_size 1024
 

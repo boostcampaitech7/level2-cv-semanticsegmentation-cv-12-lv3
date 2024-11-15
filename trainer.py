@@ -3,6 +3,7 @@ import time
 import wandb
 import torch
 import torch.nn as nn
+import numpy as np
 import os.path as osp
 import torch.optim as optim
 import torch.nn.functional as F
@@ -11,6 +12,7 @@ from tqdm.auto import tqdm
 from datetime import timedelta
 from torch.utils.data import DataLoader
 
+import time
 
 def dice_coef(y_true, y_pred):
         y_true_f = y_true.flatten(2)
@@ -91,7 +93,7 @@ class Trainer:
                 total_loss += loss.item()
                 pbar.update(1)
                 pbar.set_postfix(loss=loss.item())
-
+            
         train_end = time.time() - train_start 
         print("Epoch {}, Train Loss: {:.4f} || Elapsed time: {} || ETA: {}\n".format(
             epoch,
@@ -126,12 +128,12 @@ class Trainer:
                     total_loss += loss.item()
 
                     outputs = torch.sigmoid(outputs)
-                    outputs = (outputs > self.threshold).detach().cpu()
-                    masks = masks.detach().cpu()
-
+                    ## Dice 계산과정을 gpu에서 진행하도록 변경
+                    # outputs = (outputs > self.threshold).detach().cpu()
+                    # masks = masks.detach().cpu()
+                    outputs = (outputs > self.threshold)
                     dice = dice_coef(outputs, masks)
-                    dices.append(dice)
-
+                    dices.append(dice.detach().cpu())
                     pbar.update(1)
                     pbar.set_postfix(dice=torch.mean(dice).item(), loss=loss.item())
 

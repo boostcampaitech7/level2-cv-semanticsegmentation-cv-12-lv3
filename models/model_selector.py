@@ -1,6 +1,7 @@
 from .base_model import UnetModel, UnetPlusPlus
 from .swin_unet import SwinUnet
 from .unet_transform import R2U_Net, AttU_Net, R2AttU_Net
+from .effisegnet import EffiSegNetBN
 
 class ModelSelector():
     """
@@ -20,7 +21,8 @@ class ModelSelector():
             "AttU_Net" : AttU_Net,
             "R2AttU_Net" : R2AttU_Net,
             "UnetPlusPlus": UnetPlusPlus,
-            "Swin" : SwinUnet
+            "Swin" : SwinUnet,
+            "EffiSegNet": EffiSegNetBN
         }
 
     def get_model(self, model_name, **model_parameter):

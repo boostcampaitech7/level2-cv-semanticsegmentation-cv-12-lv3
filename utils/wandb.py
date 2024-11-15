@@ -1,3 +1,5 @@
+import re
+
 import wandb
 
 def set_wandb(configs):
@@ -40,9 +42,8 @@ def download_ckpt_from_wandb(experiment_detail, checkpoint_name):
     artifact_dir = artifact.download(path_prefix=checkpoint_name)
     return artifact_dir
 
-def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
+def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
     # 클래스와 클래스 ID 정의
-    from PIL import Image
     CLASSES = [
     'finger-1', 'finger-2', 'finger-3', 'finger-4', 'finger-5',
     'finger-6', 'finger-7', 'finger-8', 'finger-9', 'finger-10',
@@ -52,6 +53,8 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
     'Triquetrum', 'Pisiform', 'Radius', 'Ulna',
     ]   
     IDS = list(range(len(CLASSES)))
+    image_root = "/data/ephemeral/home/data/train/DCM"
+    label_root = "/data/ephemeral/home/data/train/outputs_json"
 
     # 완디비에 마스크를 기록하는 랩핑 함수
     def wb_mask(bg_img, pred_mask=[], true_mask=[]):
@@ -62,6 +65,22 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
             masks["ground truth"] = {"mask_data" : true_mask}
         return wandb.Image(bg_img, classes=class_set, masks=masks)
 
+    def extract_hand(filename):
+        """
+        파일 이름에서 왼손(L) 또는 오른손(R)을 추출하는 함수
+
+        Args:
+            filename: 파일 이름
+
+        Returns:
+            str: 파일 ID와 추출된 손(L 또는 R)
+        """
+        match = re.search(r"(.+?)/(.+?)/(.+?)_([LR])\.png", filename)
+        if match:
+            return f"{match.group(2)}_{match.group(4)}"
+        else:
+            return None
+
     # 완디비 클래스 오브젝트를 설정하여 시각화에 메타데이터 추가
     class_set = wandb.Classes([{'name': name, 'id': id} 
                             for name, id in zip(CLASSES, IDS)])
@@ -70,7 +89,9 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
     artifact = wandb.Artifact(name=wandb_run.name, type="table")
 
     # 데이터셋을 올릴 완디비 테이블 오브젝트 설정
-    columns=["id", "prediction", "ground_truth", "AvgDiceScore"]
+    columns=["file_name", "prediction", "ground_truth", 
+        # "AvgDiceScore"
+        ]
     table = wandb.Table(
         columns=columns
     )
@@ -80,15 +101,28 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
     if not os.path.isdir(TMPDIR):
         os.mkdir(TMPDIR)    
 
-    fnames = [os.path.join(dcm_folder, id, 'left_hand.dcm') for id in ids]
-    labels = [os.path.join(json_folder, id, 'json_file.json') for id in ids]
     # 고정된 특정 이미지 셋을 배치로
-    specific_image_path = ["path1", "path2"]
+    outlier_ids = ["ID073", "ID288", "ID363", "ID364", "ID387",
+        "ID430", "ID487", "ID506", "ID523", "ID543"]
+    fnames = sorted([
+        osp.relpath(osp.join(root, fname), start=image_root)
+        for root, _, files in os.walk(image_root)
+        for fname in files
+        if osp.splitext(fname)[1].lower() == ".png" \
+        and any(root.endswith(f"/{id}") for id in outlier_ids)
+    ])
+    labels = sorted([
+        osp.relpath(osp.join(root, fname), start=label_root)
+        for root, _, files in os.walk(label_root)
+        for fname in files
+        if osp.splitext(fname)[1].lower() == ".json" \
+        and any(root.endswith(f"/{id}") for id in outlier_ids)
+    ])
     dataset = XRayDataset(fnames=fnames,
                        labels=labels,
-                       image_root='/data/ephemeral/home/data/train/DCM',
-                       label_root='/data/ephemeral/home/data/train/outputs_json',
-                       fold=2,
+                       image_root=image_root,
+                       label_root=label_root,
+                       fold=None,
                        transforms=None,
                        is_train=False,
                        )
@@ -100,6 +134,7 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
         # 원본 이미지 배열
         img, mask = batch
         bg_image = (img*255).cpu().numpy().astype(np.uint8)
+        img = img.to(device)
 
         # 모델의 예측 값
         output = model(img)
@@ -109,15 +144,14 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
         prediction = (output > thr).detach().cpu().numpy()
         
         # Dice 계산
-        dice = dice_coef(prediction, mask)
+        # dice = dice_coef(prediction, mask)
         # avg_dice = torch.mean(dice, dim=?).item()
 
         # 최종 데이터 열 추가
         row = [
-            str(specific_image_path[i]), 
+            extract_hand(fname[i]), 
             wb_mask(bg_image, pred_mask=prediction),
             wb_mask(bg_image, true_mask=mask),
-            avg_dice
         ]  # row.extend로 클래스별 dice도 기록 가능
         table.add_data(*row)
         

@@ -11,6 +11,8 @@ from tqdm.auto import tqdm
 from datetime import timedelta
 from torch.utils.data import DataLoader
 
+from utils.wandb import upload_ckpt_to_wandb, wandb_table_after_evaluation
+
 
 def dice_coef(y_true, y_pred):
         y_true_f = y_true.flatten(2)
@@ -60,17 +62,6 @@ class Trainer:
         output_path = osp.join(self.save_dir, f"best_{epoch}epoch_{dice_score:.4f}.pt")
         torch.save(self.model, output_path)
         return output_path
-
-    def upload_ckpt_to_wandb(self, wandb_run, checkpoint_path):
-        # Wandb 아티팩트 정의(아티팩트=모델, 데이터셋, 테이블 등의 잡동사니)
-        # yaml config에서 experiment_detail로 설정한 이름으로 이름 설정
-        artifact = wandb.Artifact(name=wandb_run.name, type="model")
-
-        # 아티팩트에 모델 체크포인트 추가
-        artifact.add_file(local_path=checkpoint_path, name='models/'+osp.basename(checkpoint_path))
-
-        # 아티팩트를 Wandb에 저장
-        wandb_run.log_artifact(artifact, aliases=["best-Dice"])
 
 
     def train_epoch(self, epoch):
@@ -191,4 +182,5 @@ class Trainer:
                     
 
                 self.scheduler.step(avg_dice)
-        self.upload_ckpt_to_wandb(self.wandb_run, before_path)
+        upload_ckpt_to_wandb(self.wandb_run, before_path)
+        wandb_table_after_evaluation(self.wandb_run, self.model)

@@ -80,20 +80,26 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
     if not os.path.isdir(TMPDIR):
         os.mkdir(TMPDIR)    
 
+    fnames = [os.path.join(dcm_folder, id, 'left_hand.dcm') for id in ids]
+    labels = [os.path.join(json_folder, id, 'json_file.json') for id in ids]
     # 고정된 특정 이미지 셋을 배치로
-    specific_image_path = ["path"]
-    ??
-    batch = []
-    for img, label in zip(img_list, label_list):
-        batch.append((img, label))
-    batch = [Image]
+    specific_image_path = ["path1", "path2"]
+    dataset = XRayDataset(fnames=fnames,
+                       labels=labels,
+                       image_root='/data/ephemeral/home/data/train/DCM',
+                       label_root='/data/ephemeral/home/data/train/outputs_json',
+                       fold=2,
+                       transforms=None,
+                       is_train=False,
+                       )
+    data_loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
 
 
     # 추론 및 테이블 채우기
-    for i, img, mask in enumerate(batch):
+    for i, batch in enumerate(data_loader):
         # 원본 이미지 배열
-        orig_image = img[0]???
-        bg_image = image2np(orig_image.data*255).astype(np.uint8)
+        img, mask = batch
+        bg_image = (img*255).cpu().numpy().astype(np.uint8)
 
         # 모델의 예측 값
         output = model(img)
@@ -108,7 +114,7 @@ def wandb_table_after_evaluation(wandb_run, model, num_examples, thr=0.5):
 
         # 최종 데이터 열 추가
         row = [
-            str(batch_ids[i]), 
+            str(specific_image_path[i]), 
             wb_mask(bg_image, pred_mask=prediction),
             wb_mask(bg_image, true_mask=mask),
             avg_dice

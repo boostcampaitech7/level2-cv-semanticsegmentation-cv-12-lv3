@@ -100,7 +100,7 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
 
     # 데이터셋을 올릴 완디비 테이블 오브젝트 설정
     columns=["file_name",
-            #  "prediction",
+             "prediction",
              "ground_truth", 
         # "AvgDiceScore"
         ]
@@ -114,6 +114,7 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
         os.mkdir(TMPDIR)
 
     # 고정된 특정 이미지 셋을 배치로
+    # 왼손, 오른손 별로 나와서 2배로 나옵니다
     outlier_ids = ["ID073", "ID288", "ID363", 
                 #    "ID364", "ID387",
         # "ID430", "ID487", "ID506", "ID523", "ID543"

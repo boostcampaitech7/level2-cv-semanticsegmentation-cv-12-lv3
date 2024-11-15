@@ -1,7 +1,15 @@
 import os
-import re
+import os.path as osp
+import re, shutil
+from tqdm import tqdm
 
+import numpy as np
+import torch
+import torch.nn.functional as F
+from torch.utils.data import DataLoader
 import wandb
+
+from dataset import XRayDataset
 
 def set_wandb(configs):
     wandb.login(key=configs['api_key'])
@@ -56,14 +64,17 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
     IDS = list(range(len(CLASSES)))
     image_root = "/data/ephemeral/home/data/train/DCM"
     label_root = "/data/ephemeral/home/data/train/outputs_json"
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # 완디비에 마스크를 기록하는 랩핑 함수
     def wb_mask(bg_img, pred_mask=[], true_mask=[]):
         masks = {}
         if len(pred_mask) > 0:
-            masks["prediction"] = {"mask_data" : pred_mask}
+            for i in range(len(pred_mask)):
+                masks[f"prediction {i}"] = {"mask_data" : pred_mask[i]}
         if len(true_mask) > 0:
-            masks["ground truth"] = {"mask_data" : true_mask}
+            for i in range(len(true_mask)):
+                masks[f"ground truth {i}"] = {"mask_data" : true_mask[i]}
         return wandb.Image(bg_img, classes=class_set, masks=masks)
 
     def extract_hand(filename):
@@ -100,11 +111,13 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
     # 중간 시각화 결과물을 저장할 임시 폴더
     TMPDIR = "tmp_labels"
     if not os.path.isdir(TMPDIR):
-        os.mkdir(TMPDIR)    
+        os.mkdir(TMPDIR)
 
     # 고정된 특정 이미지 셋을 배치로
-    outlier_ids = ["ID073", "ID288", "ID363", "ID364", "ID387",
-        "ID430", "ID487", "ID506", "ID523", "ID543"]
+    outlier_ids = ["ID073", "ID288", "ID363", 
+                #    "ID364", "ID387",
+        # "ID430", "ID487", "ID506", "ID523", "ID543"
+        ]
     fnames = sorted([
         osp.relpath(osp.join(root, fname), start=image_root)
         for root, _, files in os.walk(image_root)
@@ -124,45 +137,47 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
                        image_root=image_root,
                        label_root=label_root,
                        fold=None,
-                       transforms=None,
+                       transforms=[],
                        is_train=False,
                        )
     data_loader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1)
+    print("Start adding inference to wandb table...")
+    with tqdm(total=len(data_loader), desc="[Adding inference to table]", disable=False) as pbar:
+        # 추론 및 테이블 채우기
+        for i, batch in enumerate(data_loader):
+            # 원본 이미지 배열
+            img, mask = batch
+            bg_image = (img[0].permute(1, 2, 0)*255).cpu().numpy().astype(np.uint8)
+            img = img.to(device)
 
+            # 모델의 예측 값
+            output = model(img)
 
-    # 추론 및 테이블 채우기
-    for i, batch in enumerate(data_loader):
-        # 원본 이미지 배열
-        img, mask = batch
-        bg_image = (img*255).cpu().numpy().astype(np.uint8)
-        img = img.to(device)
+            output = F.interpolate(output, size=(2048, 2048), mode="bilinear")
+            output = torch.sigmoid(output)
+            prediction = (output > thr).detach().cpu().numpy()
+            ground_truth = (mask > thr).detach().cpu().numpy()
 
-        # 모델의 예측 값
-        output = model(img)
+            # Dice 계산
+            # dice = dice_coef(prediction, mask)
+            # avg_dice = torch.mean(dice, dim=?).item()
 
-        output = F.interpolate(output, size=(mask_h, mask_w), mode="bilinear")
-        output = torch.sigmoid(output)
-        prediction = (output > thr).detach().cpu().numpy()
-        
-        # Dice 계산
-        # dice = dice_coef(prediction, mask)
-        # avg_dice = torch.mean(dice, dim=?).item()
-
-        # 최종 데이터 열 추가
-        row = [
-            extract_hand(fname[i]), 
-            wb_mask(bg_image, pred_mask=prediction),
-            wb_mask(bg_image, true_mask=mask),
-        ]  # row.extend로 클래스별 dice도 기록 가능
-        table.add_data(*row)
+            # 최종 데이터 열 추가
+            row = [
+                extract_hand(fnames[i]),
+                wb_mask(bg_image, pred_mask=prediction[0]),
+                wb_mask(bg_image, true_mask=ground_truth[0]),
+            ]  # row.extend로 클래스별 dice도 기록 가능
+            table.add_data(*row)
+            pbar.update(1)
         
     # 아티팩트에 테이블 추가
     artifact.add(table, "val_prediction_result")
         
     # 마지막으로, 아티팩트 기록
     print("Saving data to WandB...")
-    run.log_artifact(artifact)
-    run.finish()
+    wandb_run.log_artifact(artifact)
+    wandb_run.finish()
     print("... Run Complete")
 
     # 임시 폴더와 파일 삭제

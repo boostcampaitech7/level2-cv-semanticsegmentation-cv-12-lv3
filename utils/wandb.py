@@ -59,22 +59,20 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
     'finger-11', 'finger-12', 'finger-13', 'finger-14', 'finger-15',
     'finger-16', 'finger-17', 'finger-18', 'finger-19', 'Trapezium',
     'Trapezoid', 'Capitate', 'Hamate', 'Scaphoid', 'Lunate',
-    'Triquetrum', 'Pisiform', 'Radius', 'Ulna',
+    'Triquetrum', 'Pisiform', 'Radius', 'Ulna', 'BG'
     ]   
-    IDS = list(range(len(CLASSES)))
+    IDS = list(range(len(CLASSES)-1))+[255]
     image_root = "/data/ephemeral/home/data/train/DCM"
     label_root = "/data/ephemeral/home/data/train/outputs_json"
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     # 완디비에 마스크를 기록하는 랩핑 함수
-    def wb_mask(bg_img, pred_mask=[], true_mask=[]):
+    def wb_mask(bg_img, class_set, pred_mask=[], true_mask=[]):
         masks = {}
         if len(pred_mask) > 0:
-            for i in range(len(pred_mask)):
-                masks[f"prediction {i}"] = {"mask_data" : pred_mask[i]}
+            masks["prediction"] = {"mask_data" : pred_mask}
         if len(true_mask) > 0:
-            for i in range(len(true_mask)):
-                masks[f"ground truth {i}"] = {"mask_data" : true_mask[i]}
+            masks["ground truth"] = {"mask_data" : true_mask}
         return wandb.Image(bg_img, classes=class_set, masks=masks)
 
     def extract_hand(filename):
@@ -101,7 +99,9 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
     artifact = wandb.Artifact(name=wandb_run.name, type="table")
 
     # 데이터셋을 올릴 완디비 테이블 오브젝트 설정
-    columns=["file_name", "prediction", "ground_truth", 
+    columns=["file_name",
+            #  "prediction",
+             "ground_truth", 
         # "AvgDiceScore"
         ]
     table = wandb.Table(
@@ -155,8 +155,13 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
 
             output = F.interpolate(output, size=(2048, 2048), mode="bilinear")
             output = torch.sigmoid(output)
-            prediction = (output > thr).detach().cpu().numpy()
-            ground_truth = (mask > thr).detach().cpu().numpy()
+            prediction_tf = (output > thr)[0].detach().cpu().numpy()
+            mask_tf = (mask > thr)[0].detach().cpu().numpy()
+            prediction = np.ones((2048, 2048), dtype=int)*255
+            ground_truth = np.ones((2048, 2048), dtype=int)*255
+            for j in range(mask_tf.shape[0]):
+                prediction[prediction_tf[j]]=j
+                ground_truth[mask_tf[j]]=j
 
             # Dice 계산
             # dice = dice_coef(prediction, mask)
@@ -165,8 +170,8 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
             # 최종 데이터 열 추가
             row = [
                 extract_hand(fnames[i]),
-                wb_mask(bg_image, pred_mask=prediction[0]),
-                wb_mask(bg_image, true_mask=ground_truth[0]),
+                wb_mask(bg_image, class_set, pred_mask=prediction),
+                wb_mask(bg_image, class_set, true_mask=ground_truth),
             ]  # row.extend로 클래스별 dice도 기록 가능
             table.add_data(*row)
             pbar.update(1)

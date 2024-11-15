@@ -28,30 +28,34 @@ class XRayDataset(Dataset):
         self.class2ind = {v: i for i, v in enumerate(CLASSES)}
         self.ind2class = {v: k for k, v in self.class2ind.items()}
         self.num_classes = len(CLASSES)
-        
-        groups = [osp.dirname(fname) for fname in fnames]
-        
-        # dummy label
-        ys = [0] * len(fnames)
-        
-        gkf = GroupKFold(n_splits=5)
-        
-        filenames = []
-        labelnames = []
-        for i, (x, y) in enumerate(gkf.split(fnames, ys, groups)):
-            if self.is_train:
-                if i == self.validation_fold:
-                    continue        
-                filenames += list(fnames[y])
-                labelnames += list(labels[y])
+
+        if fold==None:
+            self.fnames = fnames
+            self.labels = labels
+        else:
+            groups = [osp.dirname(fname) for fname in fnames]
             
-            else:
-                filenames = list(fnames[y])
-                labelnames = list(labels[y])
-                break
-        
-        self.fnames = filenames
-        self.labels = labelnames
+            # dummy label
+            ys = [0] * len(fnames)
+            
+            gkf = GroupKFold(n_splits=5)
+            
+            filenames = []
+            labelnames = []
+            for i, (x, y) in enumerate(gkf.split(fnames, ys, groups)):
+                if self.is_train:
+                    if i == self.validation_fold:
+                        continue        
+                    filenames += list(fnames[y])
+                    labelnames += list(labels[y])
+                
+                else:
+                    filenames = list(fnames[y])
+                    labelnames = list(labels[y])
+                    break
+            
+            self.fnames = filenames
+            self.labels = labelnames
     
     def __len__(self):
         return len(self.fnames)

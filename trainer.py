@@ -43,6 +43,7 @@ class Trainer:
         self.val_loader = val_loader
         self.optimizer = optimizer
         self.scheduler = scheduler
+        self.scheduler_name = scheduler.__class__.__name__
         self.criterion = criterion
         self.max_epoch = max_epoch
         self.save_dir = save_dir
@@ -180,7 +181,13 @@ class Trainer:
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
                     
+                # scheduler가 ReduceLROnPlateau라면 validation과정에서 lr update
+                if self.scheduler_name == "ReduceLROnPlateau":
+                    self.scheduler.step(avg_dice)
 
-                self.scheduler.step(avg_dice)
+            # scheduler가 ReduceLROnPlateau가 아니라면 매 Epoch 마다 Lr update
+            if self.scheduler_name != "ReduceLROnPlateau":
+                self.scheduler.step()
+
         upload_ckpt_to_wandb(self.wandb_run, before_path)
         wandb_table_after_evaluation(self.wandb_run, self.model)

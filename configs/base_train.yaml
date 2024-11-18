@@ -76,7 +76,7 @@ threshold: 0.5
 save_dir: ./checkpoints/Baseline
 
 # wandb
-api_key: 04725690db787a2f05694bdedf4c7efe4dad70d0
+api_key: api 키를 입력해주세요
 team_name: CV_12_Segmantation
 project_name: Second Hypothesis
 experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (space 불가)

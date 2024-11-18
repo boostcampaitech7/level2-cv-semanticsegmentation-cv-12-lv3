@@ -47,7 +47,11 @@ class EnsembleDataset(Dataset):
         """        
         image_name = self.fnames[item]
         image_path = osp.join(self.image_root, image_name)
-        image = cv2.imread(image_path) / 255.
+        image = cv2.imread(image_path)
+
+        assert image is not None, f"{image_path} 해당 이미지를 찾지 못했습니다."
+        
+        image = image / 255.0
         return {"image" : image, "image_name" : image_name}
 
     def collate_fn(self, batch):
@@ -69,7 +73,15 @@ class EnsembleDataset(Dataset):
 
         image_dict = {k : torch.from_numpy(v.transpose(0, 3, 1, 2)).float()
                       for k, v in image_dict.items()}
-    
+        
+        for image_size, image_batch in image_dict.items():
+            assert len(image_batch.shape) == 4, \
+                f"collate_fn 내부에서 image_batch의 차원은 반드시 4차원이어야 합니다.\n \
+                현재 shape : {image_batch.shape}"
+            assert image_batch.shape == (len(batch), 3, image_size, image_size), \
+                f"collate_fn 내부에서 image_batch의 shape은 ({len(batch)}, 3, {image_size}, {image_size})이어야 합니다.\n \
+                현재 shape : {image_batch.shape}"
+
         return image_dict, image_names
     
     def _apply_transforms(self, inputs):
@@ -147,10 +159,18 @@ def save_results(cfg, filename_and_class, rles):
         "class": classes,
         "rle": rles,
     })
+
     print("\n======== Save Output ========")
     print(f"{cfg.save_dir} 폴더 내부에 {cfg.output_name}을 생성합니다..", end="\t")
     os.makedirs(cfg.save_dir, exist_ok=True)
-    df.to_csv(osp.join(cfg.save_dir, cfg.output_name), index=False)
+
+    output_path = osp.join(cfg.save_dir, cfg.output_name)
+    try:
+        df.to_csv(output_path, index=False)
+    except Exception as e:
+        print(f"{output_path}를 생성하는데 실패하였습니다.. : {e}")
+        raise
+
     print(f"{osp.join(cfg.save_dir, cfg.output_name)} 생성 완료")
 
 

@@ -225,9 +225,8 @@ def soft_voting(cfg):
                         outputs = torch.sigmoid(outputs)
                         total_output += outputs
                         
-                total_output = total_output.detach().cpu().numpy()
                 total_output /= model_count
-                total_output = (total_output > cfg.threshold)
+                total_output = (total_output > cfg.threshold).detach().cpu().numpy()
 
                 for output, image_name in zip(total_output, image_names):
                     for c, segm in enumerate(output):

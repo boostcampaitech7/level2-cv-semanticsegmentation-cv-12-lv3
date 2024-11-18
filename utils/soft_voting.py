@@ -217,14 +217,15 @@ def soft_voting(cfg):
     with torch.no_grad():
         with tqdm(total=len(data_loader), desc="[Inference...]", disable=False) as pbar:
             for image_dict, image_names in data_loader:
-                total_output = torch.zeros((cfg.batch_size, 29, 2048, 2048))
+                total_output = torch.zeros((cfg.batch_size, 29, 2048, 2048)).to(device)
                 for name, models in model_dict.items():
                     for model in models:
                         outputs = model(image_dict[name].to(device))
                         outputs = F.interpolate(outputs, size=(2048, 2048), mode="bilinear")
-                        outputs = torch.sigmoid(outputs).detach().cpu().numpy()
+                        outputs = torch.sigmoid(outputs)
                         total_output += outputs
-
+                        
+                total_output = total_output.detach().cpu().numpy()
                 total_output /= model_count
                 total_output = (total_output > cfg.threshold)
 

@@ -13,6 +13,9 @@ from tqdm import tqdm
 from omegaconf import OmegaConf
 from torch.utils.data import Dataset, DataLoader
 
+import warnings
+warnings.filterwarnings('ignore')
+
 
 class EnsembleDataset(Dataset):
     """
@@ -80,7 +83,7 @@ class EnsembleDataset(Dataset):
             dict : 변환된 이미지들
         """        
         return {
-            key: pipeline(**inputs)['images'] for key, pipeline in self.tf_dict.items()
+            key: np.array(pipeline(**inputs)['images']) for key, pipeline in self.tf_dict.items()
         }
 
 
@@ -107,6 +110,7 @@ def load_models(cfg, device):
     model_dict = {}
     model_count = 0
 
+    print("\n======== Model Load ========")
     # inference 해야하는 이미지 크기 별로 모델 순차저장
     for key, paths in cfg.model_paths.items():
         if len(paths) == 0:
@@ -119,7 +123,8 @@ def load_models(cfg, device):
             model.eval()
             model_dict[key].append(model)
             model_count += 1
-            print("불러오기 성공!\n")
+            print("불러오기 성공!")
+        print()
 
     print(f"모델 총 {model_count}개 불러오기 성공!\n")
     return model_dict, model_count
@@ -142,7 +147,7 @@ def save_results(cfg, filename_and_class, rles):
         "class": classes,
         "rle": rles,
     })
-
+    print("\n======== Save Output ========")
     print(f"{cfg.save_dir} 폴더 내부에 {cfg.output_name}을 생성합니다..", end="\t")
     os.makedirs(cfg.save_dir, exist_ok=True)
     df.to_csv(osp.join(cfg.save_dir, cfg.output_name), index=False)
@@ -169,6 +174,10 @@ def soft_voting(cfg):
     tf_dict = {image_size : A.Resize(height=image_size, width=image_size) 
                for image_size, paths in cfg.model_paths.items() 
                if len(paths) != 0}
+    
+    print("\n======== PipeLine 생성 ========")
+    for k, v in tf_dict.items():
+        print(f"{k} 사이즈는 {v} pipeline으로 처리됩니다.")
 
     dataset = EnsembleDataset(fnames, cfg, tf_dict)
     
@@ -184,6 +193,7 @@ def soft_voting(cfg):
     filename_and_class = []
     rles = []
 
+    print("======== Soft Voting Start ========")
     with torch.no_grad():
         with tqdm(total=len(data_loader), desc="[Inference...]", disable=False) as pbar:
             for image_dict, image_names in data_loader:

@@ -9,7 +9,8 @@ FINGER_CLASSES = [
     'finger-1', 'finger-2', 'finger-3', 'finger-4', 'finger-5',
     'finger-6', 'finger-7', 'finger-8', 'finger-9', 'finger-10',
     'finger-11', 'finger-12', 'finger-13', 'finger-14', 'finger-15',
-    'finger-16', 'finger-17', 'finger-18', 'finger-19'
+    'finger-16', 'finger-17', 'finger-18', 'finger-19', 'Trapezium', 'Trapezoid', 'Capitate', 'Hamate',
+    'Scaphoid', 'Lunate', 'Triquetrum', 'Pisiform'
 ]
 
 def load_json(json_path):
@@ -119,14 +120,14 @@ def process_images_and_json(source_dir, json_dir, dcm_save_dir, json_save_dir, m
             annotations['annotations'] = rotated_annotations
             
             # 회전된 이미지 저장 (DCM 폴더)
-            new_image_name = image_file.replace('image', 'image1')
+            new_image_name = image_file.replace('image', 'masked_image')
             dcm_save_folder = os.path.join(dcm_save_dir, folder)
             os.makedirs(dcm_save_folder, exist_ok=True)
             save_image_path = os.path.join(dcm_save_folder, new_image_name)
             cv2.imwrite(save_image_path, rotated_image)
             
             # 회전된 JSON 저장 (outputs_json 폴더)
-            new_json_name = json_file.replace('image', 'image1')
+            new_json_name = json_file.replace('image', 'masked_image')
             json_save_folder = os.path.join(json_save_dir, folder)
             os.makedirs(json_save_folder, exist_ok=True)
             save_json_path = os.path.join(json_save_folder, new_json_name)

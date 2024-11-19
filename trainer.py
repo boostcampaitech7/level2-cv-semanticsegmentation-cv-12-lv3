@@ -3,6 +3,7 @@ import time
 import wandb
 import torch
 import torch.nn as nn
+import numpy as np
 import os.path as osp
 import torch.optim as optim
 import torch.nn.functional as F
@@ -11,6 +12,7 @@ from tqdm.auto import tqdm
 from datetime import timedelta
 from torch.utils.data import DataLoader
 
+from utils.wandb import upload_ckpt_to_wandb, wandb_table_after_evaluation
 
 def dice_coef(y_true, y_pred):
         y_true_f = y_true.flatten(2)
@@ -41,6 +43,7 @@ class Trainer:
         self.val_loader = val_loader
         self.optimizer = optimizer
         self.scheduler = scheduler
+        self.scheduler_name = scheduler.__class__.__name__
         self.criterion = criterion
         self.max_epoch = max_epoch
         self.save_dir = save_dir
@@ -61,17 +64,6 @@ class Trainer:
         torch.save(self.model, output_path)
         return output_path
 
-    def upload_ckpt_to_wandb(self, wandb_run, checkpoint_path):
-        # Wandb 아티팩트 정의(아티팩트=모델, 데이터셋, 테이블 등의 잡동사니)
-        # yaml config에서 experiment_detail로 설정한 이름으로 이름 설정
-        artifact = wandb.Artifact(name=wandb_run.name, type="model")
-
-        # 아티팩트에 모델 체크포인트 추가
-        artifact.add_file(local_path=checkpoint_path, name='models/'+osp.basename(checkpoint_path))
-
-        # 아티팩트를 Wandb에 저장
-        wandb_run.log_artifact(artifact, aliases=["best-Dice"])
-
 
     def train_epoch(self, epoch):
         train_start = time.time()
@@ -91,7 +83,7 @@ class Trainer:
                 total_loss += loss.item()
                 pbar.update(1)
                 pbar.set_postfix(loss=loss.item())
-
+            
         train_end = time.time() - train_start 
         print("Epoch {}, Train Loss: {:.4f} || Elapsed time: {} || ETA: {}\n".format(
             epoch,
@@ -126,12 +118,12 @@ class Trainer:
                     total_loss += loss.item()
 
                     outputs = torch.sigmoid(outputs)
-                    outputs = (outputs > self.threshold).detach().cpu()
-                    masks = masks.detach().cpu()
-
+                    ## Dice 계산과정을 gpu에서 진행하도록 변경
+                    # outputs = (outputs > self.threshold).detach().cpu()
+                    # masks = masks.detach().cpu()
+                    outputs = (outputs > self.threshold)
                     dice = dice_coef(outputs, masks)
-                    dices.append(dice)
-
+                    dices.append(dice.detach().cpu())
                     pbar.update(1)
                     pbar.set_postfix(dice=torch.mean(dice).item(), loss=loss.item())
 
@@ -189,6 +181,13 @@ class Trainer:
                     best_dice = avg_dice
                     before_path = self.save_model(epoch, best_dice, before_path)
                     
+                # scheduler가 ReduceLROnPlateau라면 validation과정에서 lr update
+                if self.scheduler_name == "ReduceLROnPlateau":
+                    self.scheduler.step(avg_dice)
 
-                self.scheduler.step(avg_dice)
-        self.upload_ckpt_to_wandb(self.wandb_run, before_path)
+            # scheduler가 ReduceLROnPlateau가 아니라면 매 Epoch 마다 Lr update
+            if self.scheduler_name != "ReduceLROnPlateau":
+                self.scheduler.step()
+
+        upload_ckpt_to_wandb(self.wandb_run, before_path)
+        wandb_table_after_evaluation(self.wandb_run, self.model)

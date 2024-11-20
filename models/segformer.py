@@ -12,4 +12,6 @@ class SegFormerModel(nn.Module):
         self.model = SegformerForSemanticSegmentation.from_pretrained(**kwargs)
 
     def forward(self, x: torch.Tensor):
-        return self.model(pixel_values=x).logits
+        outputs = self.model(pixel_values=x).logits
+        upsampled_logits = nn.functional.interpolate(outputs, size=x.shape[-1], mode="bilinear", align_corners=False)
+        return upsampled_logits

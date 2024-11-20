@@ -2,7 +2,8 @@ from .base_model import UnetModel, UnetPlusPlus
 from .swin_unet import SwinUnet
 from .unet_transform import R2U_Net, AttU_Net, R2AttU_Net
 from .effisegnet import EffiSegNetBN
-
+from .upernet import UperNet
+from .mask2former import Mask2Former
 class ModelSelector():
     """
     model을 새롭게 추가하기 위한 방법
@@ -22,7 +23,9 @@ class ModelSelector():
             "R2AttU_Net" : R2AttU_Net,
             "UnetPlusPlus": UnetPlusPlus,
             "Swin" : SwinUnet,
-            "EffiSegNet": EffiSegNetBN
+            "EffiSegNet": EffiSegNetBN,
+            "UperNet": UperNet,
+            "Mask2Former": Mask2Former
         }
 
     def get_model(self, model_name, **model_parameter):

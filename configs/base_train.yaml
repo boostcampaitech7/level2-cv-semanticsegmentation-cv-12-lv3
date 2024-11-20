@@ -68,7 +68,7 @@ scheduler_parameter:
 seed: 42
 
 # validation 관련 인자 2번 폴드로 고정
-val_fold: 0
+val_fold: 2
 val_interval: 5
 threshold: 0.5
 

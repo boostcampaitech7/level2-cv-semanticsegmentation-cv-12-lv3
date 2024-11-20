@@ -33,7 +33,8 @@ def set_wandb(configs):
 def upload_ckpt_to_wandb(wandb_run, checkpoint_path):
     # Wandb 아티팩트 정의(아티팩트=모델, 데이터셋, 테이블 등의 잡동사니)
     # yaml config에서 experiment_detail로 설정한 이름으로 이름 설정
-    artifact = wandb.Artifact(name=wandb_run.name, type="model")
+    artifact_name = wandb_run.name+'_model'
+    artifact = wandb.Artifact(name=artifact_name, type="model")
 
     # 아티팩트에 모델 체크포인트 추가
     artifact.add_file(local_path=checkpoint_path, name='models/'+osp.basename(checkpoint_path))
@@ -96,7 +97,8 @@ def wandb_table_after_evaluation(wandb_run, model, thr=0.5):
                             for name, id in zip(CLASSES, IDS)])
     
     # 아티팩트(=버전 있는 폴더) 생성
-    artifact = wandb.Artifact(name=wandb_run.name, type="table")
+    artifact_name = wandb_run.name + '_table'
+    artifact = wandb.Artifact(name=artifact_name, type="table")
 
     # 데이터셋을 올릴 완디비 테이블 오브젝트 설정
     columns=["file_name",

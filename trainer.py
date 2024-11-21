@@ -70,15 +70,25 @@ class Trainer:
         self.model.train()
         total_loss = 0.0
 
+        scaler = torch.cuda.amp.GradScaler(enabled=True)
+
         with tqdm(total=len(self.train_loader), desc=f"[Training Epoch {epoch}]", disable=False) as pbar:
             for images, masks in self.train_loader:
                 images, masks = images.to(self.device), masks.to(self.device)
-                outputs = self.model(images)
-
-                loss = self.criterion(outputs, masks)
                 self.optimizer.zero_grad()
-                loss.backward()
-                self.optimizer.step()
+                # outputs = self.model(images)
+
+                with torch.cuda.amp.autocast(enabled=True):
+                    outputs = self.model(images)
+                    loss = self.criterion(outputs, masks)
+                scaler.scale(loss).backward()
+                scaler.step(self.optimizer)
+                scaler.update()
+
+                # loss = self.criterion(outputs, masks)
+                # self.optimizer.zero_grad()
+                # loss.backward()
+                # self.optimizer.step()
 
                 total_loss += loss.item()
                 pbar.update(1)

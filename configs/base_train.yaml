@@ -9,14 +9,35 @@ model_parameter:
   classes: 29
 
 # batch_size (4 or 2) 고정
-train_batch_size: 4
+train_batch_size: 2
 val_batch_size: 4
 
+# val_num_worker 지정
+num_workers: 4
+
 # image resize 1024로 고정
-image_size: &image_size 1024
+image_size: &image_size 2048
 
 # transform 관련
-transform:
+train_transform:
+  Resize:
+    width: *image_size
+    height: *image_size
+  RandomBrightnessContrast:
+    brightness_limit: 0.2
+    contrast_limit: 0.1
+    p: 0.7
+  ElasticTransform:
+    alpha: 15.0
+    sigma: 2.0
+    p: 0.5
+  Blur:
+    blur_limit: 3
+    p: 0.2
+  HorizontalFlip:
+    p: 0.5
+
+val_transform:
   Resize:
     width: *image_size
     height: *image_size
@@ -36,21 +57,18 @@ loss_name: Combined
 # combo loss 사용시
 loss_parameter:
   losses:
+    - name: BCEWithLogitsLoss
+      weight: 0.5
+      params: {}
+    - name: JaccardLoss
+      weight: 0.5
+      params:
+        smooth: 1e-5
     - name: DiceLoss
       weight: 0.5
       params:
         smooth: 1e-5
-    - name: TverskyLoss
-      weight: 0.5
-      params:
-        alpha: 0.3
-        beta: 0.7
-        smooth: 1e-5
-    - name: FocalLoss
-      weight: 0.5
-      params:
-        alpha: 0.25
-        gamma: 2.0
+        
         
 
 # scheduler 관련 설정
@@ -74,18 +92,18 @@ val_interval: 5
 threshold: 0.5
 
 # checkpoint 저장 경로
-save_dir: ./checkpoints/Unet
+save_dir: ./checkpoints
 
 # wandb
-api_key: 본인 wandb api key 입력
+api_key: api_key 
 team_name: CV_12_Segmantation
-project_name: 실험의 큰 주제
-experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (space 불가)
+project_name: Third Hypothesis
+experiment_detail: experiment # 숫자, 문자, -, _, . 만 가능 (space 불가)
 
 # notion
 # server_id는 서버0, 1, 2, 3
 # experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
 # user_name은 본인 이름 넣으시면 됩니다
 server_id: 서버N
-experiment_description : 실험 내용
+experiment_description : experiment
 user_name: 이름

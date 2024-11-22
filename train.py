@@ -57,16 +57,19 @@ def main(cfg):
     set_seed(cfg.seed)
 
     fnames, labels = setup(cfg)
-
-    transform = [getattr(A, aug)(**params) 
-                                         for aug, params in cfg.transform.items()]
+    
+    train_transforms = [getattr(A, aug)(**params) 
+                                         for aug, params in cfg.train_transform.items()]  
+    
+    val_transform = [getattr(A, aug)(**params) 
+                                         for aug, params in cfg.val_transform.items()]
 
     train_dataset = XRayDataset(fnames,
                                 labels,
                                 cfg.image_root,
                                 cfg.label_root,
                                 fold=cfg.val_fold,
-                                transforms=transform,
+                                transforms=train_transforms,
                                 is_train=True)
     
     valid_dataset = XRayDataset(fnames,
@@ -74,7 +77,7 @@ def main(cfg):
                                 cfg.image_root,
                                 cfg.label_root,
                                 fold=cfg.val_fold,
-                                transforms=transform,
+                                transforms=val_transform,
                                 is_train=False)
     
     train_loader = DataLoader(

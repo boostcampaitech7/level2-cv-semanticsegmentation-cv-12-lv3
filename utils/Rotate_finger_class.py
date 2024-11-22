@@ -64,7 +64,7 @@ def rotate_image(image, angle):
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
     return cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0))
 
-def process_images_and_json(source_dir, json_dir, dcm_save_dir, json_save_dir, max_id=348):
+def process_images_and_json(source_dir, json_dir, dcm_save_dir, json_save_dir, max_id=349):
     os.makedirs(dcm_save_dir, exist_ok=True)
     os.makedirs(json_save_dir, exist_ok=True)
     
@@ -119,14 +119,14 @@ def process_images_and_json(source_dir, json_dir, dcm_save_dir, json_save_dir, m
             annotations['annotations'] = rotated_annotations
             
             # 회전된 이미지 저장 (DCM 폴더)
-            new_image_name = image_file.replace('image', 'image1')
+            new_image_name = image_file.replace('image', 'masked_image')
             dcm_save_folder = os.path.join(dcm_save_dir, folder)
             os.makedirs(dcm_save_folder, exist_ok=True)
             save_image_path = os.path.join(dcm_save_folder, new_image_name)
             cv2.imwrite(save_image_path, rotated_image)
             
             # 회전된 JSON 저장 (outputs_json 폴더)
-            new_json_name = json_file.replace('image', 'image1')
+            new_json_name = json_file.replace('image', 'masked_image')
             json_save_folder = os.path.join(json_save_dir, folder)
             os.makedirs(json_save_folder, exist_ok=True)
             save_json_path = os.path.join(json_save_folder, new_json_name)

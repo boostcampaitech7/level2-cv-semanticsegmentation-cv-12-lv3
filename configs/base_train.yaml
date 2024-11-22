@@ -9,13 +9,13 @@ model_parameter:
   classes: 29
 
 # batch_size (4 or 2) 고정
-train_batch_size: 2
+train_batch_size: 4
 val_batch_size: 4
 
 # val_num_worker 지정
 num_workers: 4
 
-# image resize 1024로 고정
+# image resize 2048로 고정
 image_size: &image_size 2048
 
 # transform 관련
@@ -69,7 +69,6 @@ loss_parameter:
       params:
         smooth: 1e-5
         
-        
 
 # scheduler 관련 설정
 scheduler_name: ReduceLROnPlateau
@@ -92,13 +91,13 @@ val_interval: 5
 threshold: 0.5
 
 # checkpoint 저장 경로
-save_dir: ./checkpoints
+save_dir: ./checkpoints/Baseline
 
 # wandb
-api_key: api_key 
+api_key: api 키를 입력해주세요
 team_name: CV_12_Segmantation
-project_name: Third Hypothesis
-experiment_detail: experiment # 숫자, 문자, -, _, . 만 가능 (space 불가)
+project_name: Second Hypothesis
+experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (space 불가)
 
 # notion
 # server_id는 서버0, 1, 2, 3

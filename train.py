@@ -86,6 +86,7 @@ def main(cfg):
         shuffle=True,
         num_workers=8,
         drop_last=True,
+
     )
 
     # 주의: validation data는 이미지 크기가 크기 때문에 `num_wokers`는 커지면 메모리 에러가 발생할 수 있습니다.
@@ -93,8 +94,9 @@ def main(cfg):
         dataset=valid_dataset, 
         batch_size=cfg.val_batch_size,
         shuffle=False,
-        num_workers=0,
-        drop_last=False
+        num_workers=cfg.num_workers,
+        drop_last=False,
+        persistent_workers=True
     )
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

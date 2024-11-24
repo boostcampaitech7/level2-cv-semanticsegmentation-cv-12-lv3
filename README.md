@@ -76,7 +76,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
     </td>
     <td align="center">
       <a href="https://github.com/lexxsh">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003808%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003955%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
         <hr />
         <sub><b>이상혁</b></sub><br />
       </a>

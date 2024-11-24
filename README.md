@@ -69,6 +69,61 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 <br/>
 
+## Project Structure
+
+📦level2-cv-12
+ ┣ 📂configs
+ ┃ ┗ 📜base_train.yaml
+ ┃
+ ┣ 📂loss
+ ┃ ┣ 📜base_loss.py
+ ┃ ┣ 📜combined_loss.py
+ ┃ ┣ 📜dice_loss.py
+ ┃ ┣ 📜focal_loss.py
+ ┃ ┣ 📜jaccard_loss.py
+ ┃ ┣ 📜tversky_loss.py
+ ┃ ┗ 📜loss_selector.py
+ ┃
+ ┣ 📂models
+ ┃ ┣ 📜base_model.py
+ ┃ ┣ 📜model_selector.py
+ ┃ ┣ 📜effisegnet.py
+ ┃ ┣ 📜mask2former.py  
+ ┃ ┣ 📜segformer.py
+ ┃ ┣ 📜swin_unet.py
+ ┃ ┣ 📜swin_unet_base.py
+ ┃ ┣ 📜unet_transform.py
+ ┃ ┣ 📜upernet.py         
+ ┃ ┗ 📜model_selector.py
+ ┃
+ ┣ 📂scheduler
+ ┃ ┗ 📜scheduler_selector.py
+ ┃
+ ┣ 📂utils
+ ┃ ┣ 📜Crop_wrist_class.py
+ ┃ ┣ 📜Offline_augmentation.py
+ ┃ ┣ 📜Rotate_finger_class.py
+ ┃ ┣ 📜change_class.py
+ ┃ ┣ 📜hard_voting_ensemble.ipynb
+ ┃ ┣ 📜masked_image_del.py
+ ┃ ┣ 📜masked_image_gan.py
+ ┃ ┣ 📜notion.py
+ ┃ ┣ 📜soft_voting.py
+ ┃ ┗ 📜wandb.py
+ ┃
+ ┣ 📂EDA
+ ┃ ┣ 📜EDA.ipynb
+ ┃ ┣ 📜Output_Visualization.ipynb
+ ┃ ┣ 📜Transform.ipynb 
+ ┃ ┣ 📜Test_data_angle_analysis.ipynb  
+ ┃ ┗ 📜Masked_Visualization.ipynb
+ ┃
+ ┣ 📜train.py
+ ┣ 📜trainer.py                      
+ ┣ 📜inference.py                   
+ ┣ 📜dataset.py             
+ ┗ 📜README.md
+
 ## Commit Convention
 1. `Feature` ✨ **새로운 기능 추가**
 2. `Bug` 🐛 **버그 수정**
@@ -94,3 +149,27 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 - `Feature/~~~`
 - `Refactor/~~~`
+
+## Offline Augmentation 적용
+
+1. Masked
+- 기존 Train의 img와 GT가 담긴 JSON을 이용하여 각 클래스 부분만 Masking된 img를 Offline Augmentation으로 추가하였습니다.
+![image](https://github.com/user-attachments/assets/529d822e-a0e4-494a-8ace-c4ac4950fb1b)
+
+2. Rotate, Crop
+- 이미 손목이 돌아가 있는 데이터를 제외하고 finger 부분만 Masking하여 40~50도 Rotate 적용시킨 img를 Offline Augmentation으로 추가하였습니다.
+![image](https://github.com/user-attachments/assets/d0e2434d-c0b7-4be3-a8f8-0cd5f873e933)
+
+3. 클래스 특화
+- Masked를 적용한 img에서 finger를 제외한 손등뼈부분 중 val점수가 비교적 낮은 trapzoid, pisiform 두가지 클래스만 GT로 설정하여 Offline Augmentation으로 추가했습니다.
+![image](https://github.com/user-attachments/assets/c5f44439-54a7-4b19-a047-402c3d6e9241)
+
+## Final result
+
+
+
+
+
+
+
+## 최종 순위

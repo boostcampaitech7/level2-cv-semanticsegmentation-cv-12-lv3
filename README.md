@@ -28,9 +28,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 <br/>
 
 # 🗃️ Dataset
-
 ![image](https://github.com/user-attachments/assets/c2a3a918-6594-4493-8d39-b9c1d0cd8202)
-
 - 이미지 크기
   - **(2048,2048), 3 channel**
 
@@ -118,7 +116,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 <br />
 
 ## Project Structure
-'''
+```
 📦level2-cv-12
  ┣ 📂configs
  ┃ ┗ 📜base_train.yaml
@@ -171,6 +169,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
  ┣ 📜inference.py                   
  ┣ 📜dataset.py             
  ┗ 📜README.md
+```
 
 ## Commit Convention
 1. `Feature` ✨ **새로운 기능 추가**

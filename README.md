@@ -40,7 +40,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 # 😄 Team Member
 
-<table align="center">
+<!-- <table align="center">
     <tr align="center">
         <td><img src="https://github.com/user-attachments/assets/655258d1-43fd-4db7-a3fb-0d5a37c45774" width="140" height="140"></td>
         <td><img src="https://github.com/user-attachments/assets/1ec21af7-8c04-4e99-9922-4275e56516c4" width="140" height="140"></td>
@@ -65,12 +65,60 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
         <td>T7253</td>
         <td>T7158</td>
     </tr>
+</table> -->
+<div align="center">
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/lkl4502">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00004010%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>오홍석</b></sub><br />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/lexxsh">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003808%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>이상혁</b></sub><br />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/yejin-s9">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003955%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>이예진</b></sub><br />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Haneol-Kijm">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003793%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>김한얼</b></sub><br />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/PGSammy">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00004034%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>조재만</b></sub><br />
+      </a>
+    </td>
+        <td align="center">
+      <a href="https://github.com/oweixx">
+        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00004034%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
+        <hr />
+        <sub><b>방민혁</b></sub><br />
+      </a>
+    </td>
+  </tr>
 </table>
+</div>
 
-<br/>
+<br />
 
 ## Project Structure
-
+'''
 📦level2-cv-12
  ┣ 📂configs
  ┃ ┗ 📜base_train.yaml
@@ -164,7 +212,12 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 - Masked를 적용한 img에서 finger를 제외한 손등뼈부분 중 val점수가 비교적 낮은 trapzoid, pisiform 두가지 클래스만 GT로 설정하여 Offline Augmentation으로 추가했습니다.
 ![image](https://github.com/user-attachments/assets/c5f44439-54a7-4b19-a047-402c3d6e9241)
 
-## Final result
+## Final Structure
+
+
+
+
+
 
 
 

@@ -1,7 +1,6 @@
 # 📋 Project Overview
 
-
-![project_image](https://github.com/user-attachments/assets/8b7c2877-efae-4e3b-895e-8415705ac748)
+![project_image](https://github.com/user-attachments/assets/e03c0c8f-6e48-4a35-88f4-9c15651d73f6)
 
 뼈는 우리 몸의 구조와 기능에 중요한 영향을 미치기 때문에, 정확한 뼈 분할은 의료 진단 및 치료 계획을 개발하는 데 필수적입니다.
 
@@ -28,6 +27,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 <br/>
 
 # 🗃️ Dataset
+
 ![image](https://github.com/user-attachments/assets/c2a3a918-6594-4493-8d39-b9c1d0cd8202)
 - 이미지 크기
   - **(2048,2048), 3 channel**
@@ -38,14 +38,14 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 # 😄 Team Member
 
-<!-- <table align="center">
+<table align="center">
     <tr align="center">
-        <td><img src="https://github.com/user-attachments/assets/655258d1-43fd-4db7-a3fb-0d5a37c45774" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/1ec21af7-8c04-4e99-9922-4275e56516c4" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/f8ce149b-06dd-466b-ba16-83523e3f1abe" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/406da993-6556-4238-ab22-74239c870aaa" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/3bedb72c-bf6b-4feb-b486-3232e2363406" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/86ce3850-aa0a-4564-ba35-65c1af08c85f" width="140" height="140"></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003880%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003955%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003894%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003885%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003890%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003872%2Fuser_image.png&w=1920&q=75" width="140" height="140" alt=""/></td>
     </tr>
     <tr align="center">
         <td><a href="https://github.com/lkl4502" target="_blank">오홍석</a></td>
@@ -63,113 +63,119 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
         <td>T7253</td>
         <td>T7158</td>
     </tr>
-</table> -->
-<div align="center">
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/lkl4502">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003880%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>오홍석</b></sub><br />
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/lexxsh">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003955%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>이상혁</b></sub><br />
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/yejin-s9">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003894%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>이예진</b></sub><br />
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/Haneol-Kijm">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003885%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>김한얼</b></sub><br />
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/PGSammy">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003890%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>조재만</b></sub><br />
-      </a>
-    </td>
-        <td align="center">
-      <a href="https://github.com/oweixx">
-        <img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003872%2Fuser_image.png&w=1920&q=75" width="120px" height="120px" alt=""/>
-        <hr />
-        <sub><b>방민혁</b></sub><br />
-      </a>
-    </td>
-  </tr>
 </table>
-</div>
 
 <br />
 
+# 🧳 Project Progress Summary
+
+아래의 항목들로 프로젝트를 진행한 과정을 설명한다.
+
+<br>
+
 ## Project Structure
 ```
-📦level2-cv-12
- ┣ 📂configs
- ┃ ┗ 📜base_train.yaml
+📦 level2-cv-12
+ ┣ 📂 configs
+ ┃ ┗ 📜 base_train.yaml
  ┃
- ┣ 📂loss
- ┃ ┣ 📜base_loss.py
- ┃ ┣ 📜combined_loss.py
- ┃ ┣ 📜dice_loss.py
- ┃ ┣ 📜focal_loss.py
- ┃ ┣ 📜jaccard_loss.py
- ┃ ┣ 📜tversky_loss.py
- ┃ ┗ 📜loss_selector.py
+ ┣ 📂 loss
+ ┃ ┣ 📜 base_loss.py
+ ┃ ┣ 📜 combined_loss.py
+ ┃ ┣ 📜 dice_loss.py
+ ┃ ┣ 📜 focal_loss.py
+ ┃ ┣ 📜 jaccard_loss.py
+ ┃ ┣ 📜 tversky_loss.py
+ ┃ ┗ 📜 loss_selector.py
  ┃
- ┣ 📂models
- ┃ ┣ 📜base_model.py
- ┃ ┣ 📜model_selector.py
- ┃ ┣ 📜effisegnet.py
- ┃ ┣ 📜mask2former.py  
- ┃ ┣ 📜segformer.py
- ┃ ┣ 📜swin_unet.py
- ┃ ┣ 📜swin_unet_base.py
- ┃ ┣ 📜unet_transform.py
- ┃ ┣ 📜upernet.py         
- ┃ ┗ 📜model_selector.py
+ ┣ 📂 models
+ ┃ ┣ 📜 base_model.py
+ ┃ ┣ 📜 model_selector.py
+ ┃ ┣ 📜 effisegnet.py
+ ┃ ┣ 📜 mask2former.py  
+ ┃ ┣ 📜 segformer.py
+ ┃ ┣ 📜 swin_unet.py
+ ┃ ┣ 📜 swin_unet_base.py
+ ┃ ┣ 📜 unet_transform.py
+ ┃ ┗ 📜 upernet.py         
  ┃
- ┣ 📂scheduler
- ┃ ┗ 📜scheduler_selector.py
+ ┣ 📂 scheduler
+ ┃ ┗ 📜 scheduler_selector.py
  ┃
- ┣ 📂utils
- ┃ ┣ 📜Crop_wrist_class.py
- ┃ ┣ 📜Offline_augmentation.py
- ┃ ┣ 📜Rotate_finger_class.py
- ┃ ┣ 📜change_class.py
- ┃ ┣ 📜hard_voting_ensemble.ipynb
- ┃ ┣ 📜masked_image_del.py
- ┃ ┣ 📜masked_image_gan.py
- ┃ ┣ 📜notion.py
- ┃ ┣ 📜soft_voting.py
- ┃ ┗ 📜wandb.py
+ ┣ 📂 utils
+ ┃ ┣ 📜 Crop_wrist_class.py
+ ┃ ┣ 📜 Offline_augmentation.py
+ ┃ ┣ 📜 Rotate_finger_class.py
+ ┃ ┣ 📜 change_class.py
+ ┃ ┣ 📜 hard_voting_ensemble.ipynb
+ ┃ ┣ 📜 masked_image_del.py
+ ┃ ┣ 📜 masked_image_gan.py
+ ┃ ┣ 📜 notion.py
+ ┃ ┣ 📜 soft_voting.py
+ ┃ ┗ 📜 wandb.py
  ┃
- ┣ 📂EDA
- ┃ ┣ 📜EDA.ipynb
- ┃ ┣ 📜Output_Visualization.ipynb
- ┃ ┣ 📜Transform.ipynb 
- ┃ ┣ 📜Test_data_angle_analysis.ipynb  
- ┃ ┗ 📜Masked_Visualization.ipynb
+ ┣ 📂 EDA
+ ┃ ┣ 📜 EDA.ipynb
+ ┃ ┣ 📜 Output_Visualization.ipynb
+ ┃ ┣ 📜 Transform.ipynb 
+ ┃ ┣ 📜 Test_data_angle_analysis.ipynb  
+ ┃ ┗ 📜 Masked_Visualization.ipynb
  ┃
- ┣ 📜train.py
- ┣ 📜trainer.py                      
- ┣ 📜inference.py                   
- ┣ 📜dataset.py             
- ┗ 📜README.md
+ ┣ 📜 train.py
+ ┣ 📜 trainer.py                      
+ ┣ 📜 inference.py                   
+ ┣ 📜 dataset.py             
+ ┗ 📜 README.md
 ```
+
+<br/>
+
+## 🦴 Offline Augmentation
+
+> ### Masked
+
+![image](https://github.com/user-attachments/assets/529d822e-a0e4-494a-8ace-c4ac4950fb1b)
+
+- 기존 Train의 img와 GT가 담긴 JSON을 이용하여 각 클래스 부분만 Masking된 img를 Offline Augmentation으로 추가하였습니다.
+
+<br>
+
+> ### Rotate, Crop
+
+![image](https://github.com/user-attachments/assets/d0e2434d-c0b7-4be3-a8f8-0cd5f873e933)
+
+- 이미 손목이 돌아가 있는 데이터를 제외하고 finger 부분만 Masking하여 40~50도 Rotate 적용시킨 img를 Offline Augmentation으로 추가하였습니다.
+
+<br>
+
+> ### 클래스 특화
+
+![image](https://github.com/user-attachments/assets/c5f44439-54a7-4b19-a047-402c3d6e9241)
+
+- Masked를 적용한 img에서 finger를 제외한 손등뼈부분 중 val점수가 비교적 낮은 trapzoid, pisiform 두가지 클래스만 GT로 설정하여 Offline Augmentation으로 추가했습니다.
+
+
+<br/>
+
+## 🏆 Project Result
+
+**_<p align=center>Public Leader Board</p>_**
+<!-- <img src="" alt="Public Leader Board" >-->
+
+<br>
+
+**_<p align=center>Private Leader Board</p>_**
+<!-- <img src="" alt="Private Leader Board" >-->
+
+<br/>
+
+## 🔗 Reference
+
+<!--### [📎 Semantic Segmentation Wrap-UP Report]()
+
+### [📎 Semantic Segmentation Notion]() -->
+
+<br>
 
 ## Commit Convention
 1. `Feature` ✨ **새로운 기능 추가**
@@ -196,32 +202,3 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 - `Feature/~~~`
 - `Refactor/~~~`
-
-## Offline Augmentation 적용
-
-1. Masked
-- 기존 Train의 img와 GT가 담긴 JSON을 이용하여 각 클래스 부분만 Masking된 img를 Offline Augmentation으로 추가하였습니다.
-![image](https://github.com/user-attachments/assets/529d822e-a0e4-494a-8ace-c4ac4950fb1b)
-
-2. Rotate, Crop
-- 이미 손목이 돌아가 있는 데이터를 제외하고 finger 부분만 Masking하여 40~50도 Rotate 적용시킨 img를 Offline Augmentation으로 추가하였습니다.
-![image](https://github.com/user-attachments/assets/d0e2434d-c0b7-4be3-a8f8-0cd5f873e933)
-
-3. 클래스 특화
-- Masked를 적용한 img에서 finger를 제외한 손등뼈부분 중 val점수가 비교적 낮은 trapzoid, pisiform 두가지 클래스만 GT로 설정하여 Offline Augmentation으로 추가했습니다.
-![image](https://github.com/user-attachments/assets/c5f44439-54a7-4b19-a047-402c3d6e9241)
-
-## Final Structure
-
-
-
-
-
-
-
-
-
-
-
-
-## 최종 순위

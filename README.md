@@ -67,13 +67,8 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 <br />
 
-# 🧳 Project Progress Summary
+# 🧳 Project Structure
 
-아래의 항목들로 프로젝트를 진행한 과정을 설명한다.
-
-<br>
-
-## Project Structure
 ```
 📦 level2-cv-12
  ┣ 📂 configs
@@ -130,34 +125,7 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 <br/>
 
-## 🦴 Offline Augmentation
-
-> ### Masked
-
-![image](https://github.com/user-attachments/assets/529d822e-a0e4-494a-8ace-c4ac4950fb1b)
-
-- 기존 Train의 img와 GT가 담긴 JSON을 이용하여 각 클래스 부분만 Masking된 img를 Offline Augmentation으로 추가하였습니다.
-
-<br>
-
-> ### Rotate, Crop
-
-![image](https://github.com/user-attachments/assets/d0e2434d-c0b7-4be3-a8f8-0cd5f873e933)
-
-- 이미 손목이 돌아가 있는 데이터를 제외하고 finger 부분만 Masking하여 40~50도 Rotate 적용시킨 img를 Offline Augmentation으로 추가하였습니다.
-
-<br>
-
-> ### 클래스 특화
-
-![image](https://github.com/user-attachments/assets/c5f44439-54a7-4b19-a047-402c3d6e9241)
-
-- Masked를 적용한 img에서 finger를 제외한 손등뼈부분 중 val점수가 비교적 낮은 trapzoid, pisiform 두가지 클래스만 GT로 설정하여 Offline Augmentation으로 추가했습니다.
-
-
-<br/>
-
-## 🏆 Project Result
+# 🏆 Project Result
 
 **_<p align=center>Public Leader Board</p>_**
 <!-- <img src="" alt="Public Leader Board" >-->
@@ -169,11 +137,11 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 <br/>
 
-## 🔗 Reference
+# 🔗 Reference
 
-<!--### [📎 Semantic Segmentation Wrap-UP Report]()
+<!--### [📎 Semantic Segmentation Wrap-UP Report]()-->
 
-### [📎 Semantic Segmentation Notion]() -->
+### [📎 Semantic Segmentation Notion](https://knotty-bed-a8d.notion.site/Hand-Bone-Image-Segmentation-13b9d71d84118060b07ae818995cafbc?pvs=4) 
 
 <br>
 

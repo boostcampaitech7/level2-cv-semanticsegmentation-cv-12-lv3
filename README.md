@@ -128,12 +128,12 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 # 🏆 Project Result
 
 **_<p align=center>Public Leader Board</p>_**
-<!-- <img src="" alt="Public Leader Board" >-->
+<img width="965" alt="Public Leader Board" src="https://github.com/user-attachments/assets/5526c7fe-8afd-4c1b-b664-8beb3bbf0517">
 
 <br>
 
 **_<p align=center>Private Leader Board</p>_**
-<!-- <img src="" alt="Private Leader Board" >-->
+<img width="967" alt="Private Leader Board" src="https://github.com/user-attachments/assets/14308381-57fc-472b-8f57-22cca8b8f8e8">
 
 <br/>
 

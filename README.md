@@ -139,9 +139,11 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 # 🔗 Reference
 
-<!--### [📎 Semantic Segmentation Wrap-UP Report]()-->
+### [📎 Semantic Segmentation Wrap-UP Report](https://drive.google.com/file/d/1v_u280FOOcbDontCnnzSCWAaz5qhtmH3/view?usp=sharing)
 
 ### [📎 Semantic Segmentation Notion](https://knotty-bed-a8d.notion.site/Hand-Bone-Image-Segmentation-13b9d71d84118060b07ae818995cafbc?pvs=4) 
+
+### [📎 Semantic Segmentation Presentation](https://drive.google.com/file/d/1YDLo48XjkARq5MBWTxEX9Q8devyMiefq/view?usp=sharing) 
 
 <br>
 

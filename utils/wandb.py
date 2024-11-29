@@ -11,6 +11,8 @@ import wandb
 
 from dataset import XRayDataset
 
+# Wandb logging과 artifact를 활용하여 Checkpoint 업로드 기능
+
 def set_wandb(configs):
     wandb.login(key=configs['api_key'])
     wandb_run = wandb.init(

@@ -1,7 +1,6 @@
 # 📋 Project Overview
 
-
-![project_image](https://github.com/user-attachments/assets/8b7c2877-efae-4e3b-895e-8415705ac748)
+![project_image](https://github.com/user-attachments/assets/e03c0c8f-6e48-4a35-88f4-9c15651d73f6)
 
 뼈는 우리 몸의 구조와 기능에 중요한 영향을 미치기 때문에, 정확한 뼈 분할은 의료 진단 및 치료 계획을 개발하는 데 필수적입니다.
 
@@ -30,7 +29,6 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 # 🗃️ Dataset
 
 ![image](https://github.com/user-attachments/assets/c2a3a918-6594-4493-8d39-b9c1d0cd8202)
-
 - 이미지 크기
   - **(2048,2048), 3 channel**
 
@@ -42,12 +40,12 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
 
 <table align="center">
     <tr align="center">
-        <td><img src="https://github.com/user-attachments/assets/655258d1-43fd-4db7-a3fb-0d5a37c45774" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/1ec21af7-8c04-4e99-9922-4275e56516c4" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/f8ce149b-06dd-466b-ba16-83523e3f1abe" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/406da993-6556-4238-ab22-74239c870aaa" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/3bedb72c-bf6b-4feb-b486-3232e2363406" width="140" height="140"></td>
-        <td><img src="https://github.com/user-attachments/assets/86ce3850-aa0a-4564-ba35-65c1af08c85f" width="140" height="140"></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003880%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003955%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003894%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003885%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003890%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
+        <td><img src="https://stages.ai/_next/image?url=https%3A%2F%2Faistages-api-public-prod.s3.amazonaws.com%2Fapp%2FUsers%2F00003872%2Fuser_image.png&w=1920&q=75" width="120" height="120" alt=""/></td>
     </tr>
     <tr align="center">
         <td><a href="https://github.com/lkl4502" target="_blank">오홍석</a></td>
@@ -67,7 +65,87 @@ Bone Segmentation은 인공지능 분야에서 중요한 응용 분야 중 하�
     </tr>
 </table>
 
+<br />
+
+# 🧳 Project Structure
+
+```
+📦 level2-cv-12
+ ┣ 📂 configs
+ ┃ ┗ 📜 base_train.yaml
+ ┃
+ ┣ 📂 loss
+ ┃ ┣ 📜 base_loss.py
+ ┃ ┣ 📜 combined_loss.py
+ ┃ ┣ 📜 dice_loss.py
+ ┃ ┣ 📜 focal_loss.py
+ ┃ ┣ 📜 jaccard_loss.py
+ ┃ ┣ 📜 tversky_loss.py
+ ┃ ┗ 📜 loss_selector.py
+ ┃
+ ┣ 📂 models
+ ┃ ┣ 📜 base_model.py
+ ┃ ┣ 📜 model_selector.py
+ ┃ ┣ 📜 effisegnet.py
+ ┃ ┣ 📜 mask2former.py  
+ ┃ ┣ 📜 segformer.py
+ ┃ ┣ 📜 swin_unet.py
+ ┃ ┣ 📜 swin_unet_base.py
+ ┃ ┣ 📜 unet_transform.py
+ ┃ ┗ 📜 upernet.py         
+ ┃
+ ┣ 📂 scheduler
+ ┃ ┗ 📜 scheduler_selector.py
+ ┃
+ ┣ 📂 utils
+ ┃ ┣ 📜 Crop_wrist_class.py
+ ┃ ┣ 📜 Offline_augmentation.py
+ ┃ ┣ 📜 Rotate_finger_class.py
+ ┃ ┣ 📜 change_class.py
+ ┃ ┣ 📜 hard_voting_ensemble.ipynb
+ ┃ ┣ 📜 masked_image_del.py
+ ┃ ┣ 📜 masked_image_gan.py
+ ┃ ┣ 📜 notion.py
+ ┃ ┣ 📜 soft_voting.py
+ ┃ ┗ 📜 wandb.py
+ ┃
+ ┣ 📂 EDA
+ ┃ ┣ 📜 EDA.ipynb
+ ┃ ┣ 📜 Output_Visualization.ipynb
+ ┃ ┣ 📜 Transform.ipynb 
+ ┃ ┣ 📜 Test_data_angle_analysis.ipynb  
+ ┃ ┗ 📜 Masked_Visualization.ipynb
+ ┃
+ ┣ 📜 train.py
+ ┣ 📜 trainer.py                      
+ ┣ 📜 inference.py                   
+ ┣ 📜 dataset.py             
+ ┗ 📜 README.md
+```
+
 <br/>
+
+# 🏆 Project Result
+
+**_<p align=center>Public Leader Board</p>_**
+<img width="965" alt="Public Leader Board" src="https://github.com/user-attachments/assets/5526c7fe-8afd-4c1b-b664-8beb3bbf0517">
+
+<br>
+
+**_<p align=center>Private Leader Board</p>_**
+<img width="967" alt="Private Leader Board" src="https://github.com/user-attachments/assets/14308381-57fc-472b-8f57-22cca8b8f8e8">
+
+<br/>
+
+# 🔗 Reference
+
+### [📎 Semantic Segmentation Wrap-UP Report](https://drive.google.com/file/d/1v_u280FOOcbDontCnnzSCWAaz5qhtmH3/view?usp=sharing)
+
+### [📎 Semantic Segmentation Notion](https://knotty-bed-a8d.notion.site/Hand-Bone-Image-Segmentation-13b9d71d84118060b07ae818995cafbc?pvs=4) 
+
+### [📎 Semantic Segmentation Presentation](https://drive.google.com/file/d/1YDLo48XjkARq5MBWTxEX9Q8devyMiefq/view?usp=sharing) 
+
+<br>
 
 ## Commit Convention
 1. `Feature` ✨ **새로운 기능 추가**

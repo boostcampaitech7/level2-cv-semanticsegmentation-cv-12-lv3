@@ -3,6 +3,8 @@ from datetime import datetime
 import pytz
 import time
 
+# 노션 서버 사용현황 자동 업데이트 기능
+
 # txt 파일에서 불러오기
 def read_notion_credentials():
     try:

@@ -1,8 +1,10 @@
 import os
-import json
 import cv2
+import json
 import numpy as np
 from tqdm import tqdm
+
+# 손가락 클래스만 Masking 후 Rotate된 이미지 생성
 
 # 손가락에 해당하는 클래스
 FINGER_CLASSES = [

@@ -3,13 +3,13 @@ image_root: /data/ephemeral/home/data/train/DCM
 label_root: /data/ephemeral/home/data/train/outputs_json
 
 # 모델명 및 사전 학습 여부
-model_name: Unet
+model_name: UnetPlusPlus
 model_parameter:
-  encoder_name: efficientnet-b0
+  encoder_name: efficientnet-b3
   classes: 29
 
 # batch_size (4 or 2) 고정
-train_batch_size: 4
+train_batch_size: 2
 val_batch_size: 4
 
 # val_num_worker 지정
@@ -46,9 +46,9 @@ val_transform:
 lr: 1e-3
 weight_decay: 1e-6
 
-max_epoch: &max_epoch 100
+max_epoch: &max_epoch 80
 
-# loss 관련 설정 
+# loss 관련 설정
 loss_name: Combined
 
 # 단일 loss 사용시에 필요한 parameter -> dict 형태로 작성
@@ -68,13 +68,12 @@ loss_parameter:
       weight: 0.5
       params:
         smooth: 1e-5
-        
 
 # scheduler 관련 설정
 scheduler_name: ReduceLROnPlateau
 
 # scheduler 필요한 parameter -> dict 형태로 작성
-scheduler_parameter: 
+scheduler_parameter:
   mode: max
   factor: 0.5
   patience: 1
@@ -104,5 +103,5 @@ experiment_detail: 실험 detail 입력 # 숫자, 문자, -, _, . 만 가능 (sp
 # experiment_description는 무슨 작업 하는지 줄 띄기는 \n 사용하면 됩니다
 # user_name은 본인 이름 넣으시면 됩니다
 server_id: 서버N
-experiment_description : experiment
+experiment_description: experiment
 user_name: 이름

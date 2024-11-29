@@ -78,17 +78,13 @@ class Trainer:
                 self.optimizer.zero_grad()
                 # outputs = self.model(images)
 
+                # fp16 적용
                 with torch.cuda.amp.autocast(enabled=True):
                     outputs = self.model(images)
                     loss = self.criterion(outputs, masks)
                 scaler.scale(loss).backward()
                 scaler.step(self.optimizer)
                 scaler.update()
-
-                # loss = self.criterion(outputs, masks)
-                # self.optimizer.zero_grad()
-                # loss.backward()
-                # self.optimizer.step()
 
                 total_loss += loss.item()
                 pbar.update(1)
@@ -129,8 +125,6 @@ class Trainer:
 
                     outputs = torch.sigmoid(outputs)
                     ## Dice 계산과정을 gpu에서 진행하도록 변경
-                    # outputs = (outputs > self.threshold).detach().cpu()
-                    # masks = masks.detach().cpu()
                     outputs = (outputs > self.threshold)
                     dice = dice_coef(outputs, masks)
                     dices.append(dice.detach().cpu())

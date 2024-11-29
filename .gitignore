@@ -1,0 +1,34 @@
+# pths
+pths/
+
+# image 파일 제외
+*.png
+*.jpg
+*.jpeg
+
+# yaml 파일 제외
+*.yaml
+
+# python cache 제외
+__pycache__
+*.pyc
+*.pyd
+
+# editor settings
+.idea
+.vscode
+.DS_Store
+
+# 모델 checkpoint 제외
+*.pt
+*.pkl
+*.pth
+
+# wandb
+wandb/
+
+# 결과 파일 제외
+*.csv
+
+# visualization 폴더 제외
+visualization/

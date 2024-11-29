@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-OUTPUT_CSV_ROOT = '../soft_ensemble/KFold_weight_25.csv'
+# 모폴로지 연산 수행하는 파일
+
+OUTPUT_CSV_ROOT = '적용할 csv파일 경로'
 
 CLASSES = [
     'finger-1', 'finger-2', 'finger-3', 'finger-4', 'finger-5',

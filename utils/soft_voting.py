@@ -16,6 +16,7 @@ from torch.utils.data import Dataset, DataLoader
 import warnings
 warnings.filterwarnings('ignore')
 
+# Soft Voting 하는 파일
 
 class EnsembleDataset(Dataset):
     """

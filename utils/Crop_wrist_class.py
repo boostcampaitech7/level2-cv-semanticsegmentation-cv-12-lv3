@@ -4,6 +4,8 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
+# 손등뼈만 크롭한 이미지 생성
+
 # 손목에 해당하는 클래스만 필터링
 WRIST_CLASSES = [
     'Trapezium', 'Trapezoid', 'Capitate', 'Hamate',

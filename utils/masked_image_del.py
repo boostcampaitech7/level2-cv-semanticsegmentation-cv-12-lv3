@@ -1,5 +1,7 @@
 import os
 
+# Masked 이미지 삭제
+
 def delete_augmented_images(source_dir, prefix="masked_image"):
     """
     주어진 source_dir에서 특정 prefix로 시작하는 파일을 삭제하는 함수.

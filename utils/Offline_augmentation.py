@@ -4,6 +4,8 @@ import json
 from tqdm import tqdm
 import albumentations as A
 
+# 특정 Augmentation을 적용한 이미지 생성하는 기능
+
 # Augmentation 정의
 transform = A.Compose([
     A.HorizontalFlip(p=1),
@@ -36,7 +38,7 @@ def augment_and_save_images(source_dir):
                 
                 # 새로운 파일명 생성 ('image' 뒤에 '1' 추가)
                 if filename.startswith("image"):
-                    new_filename = filename.replace("image", "image1", 1)
+                    new_filename = filename.replace("image", "trasformed_image", 1)
                 else:
                     new_filename = "1" + filename
                 
@@ -78,7 +80,7 @@ def process_json_files(source_dir, image_width):
                 
                 # 새로운 파일명 생성 ('image' 뒤에 '1' 추가)
                 if filename.startswith("image"):
-                    new_filename = filename.replace("image", "image1", 1)
+                    new_filename = filename.replace("image", "trasformed_image", 1)
                 else:
                     new_filename = "1" + filename
                 
